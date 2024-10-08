@@ -14,7 +14,6 @@ export default function LoginModal() {
     const redirectUri = process.env.NEXT_PUBLIC_GOOGLE_AUTH_REDIRECT_URI;
 
     const href = `https://accounts.google.com/o/oauth2/v2/auth?
-        response_type=code
 		&client_id=${process.env.NEXT_PUBLIC_GOOGLE_AUTH_CLIENT_ID}
 		&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_AUTH_REDIRECT_URI}
 		&response_type=code
