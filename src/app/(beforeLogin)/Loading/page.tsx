@@ -43,10 +43,15 @@ export default function Loading() {
       const accessToken = res.data.data.jwtToken.accessToken;
       localStorage.setItem("accesstoken", accessToken);
 
-      if (res.data.isExistingMember) {
+      const responseCode = res.data.code;
+      console.log("responseCode: ", responseCode);
+
+      if (responseCode === 200) {
         handleHome();
-      } else {
+      } else if (responseCode === 201) {
         handleSignup();
+      } else {
+        console.error(`Unexpected response code: ${responseCode}`);
       }
     } catch (error) {
       console.error("Login failed: ", error);
