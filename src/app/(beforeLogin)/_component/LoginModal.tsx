@@ -11,12 +11,13 @@ export default function LoginModal() {
 
   const onClickLogin = () => {
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_AUTH_CLIENT_ID;
-    const redirectUri = process.env.NEXT_PUBLIC_GOOGLE_AUTH_REDIRECT_URI;
+    const redirectUri = String(
+      process.env.NEXT_PUBLIC_GOOGLE_AUTH_REDIRECT_URI
+    );
 
-    const href = `https://accounts.google.com/o/oauth2/v2/auth?
+    const href = `https://accounts.google.com/o/oauth2/v2/auth?&response_type=code
 		&client_id=${clientId}
 		&redirect_uri=${redirectUri}
-		&response_type=code
 		&scope=email profile
         &access_type=offline`;
 
