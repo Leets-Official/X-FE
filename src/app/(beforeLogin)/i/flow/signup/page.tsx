@@ -1,5 +1,5 @@
-import SignupModal from "@/app/(beforeLogin)/_component/SignupModal";
+import BirthModal from "@/app/(beforeLogin)/_component/birthModal/page";
 
 export default function Signup() {
-  return <SignupModal />;
+  return <BirthModal />;
 }

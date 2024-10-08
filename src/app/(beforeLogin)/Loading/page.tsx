@@ -15,7 +15,7 @@ export default function Loading() {
 
   //처음 가입한 유저일 시: 회원가입 모달 페이지로 이동
   const handleSignup = () => {
-    router.push("/SignupModal");
+    router.push("/birthModal");
   };
 
   const params = useSearchParams();
