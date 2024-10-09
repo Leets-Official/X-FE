@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 export default function Login() {
   const router = useRouter();
-  router.replace("/i/flow/login");
+  router.push("/i/flow/login");
 
   return <Main />;
 }
