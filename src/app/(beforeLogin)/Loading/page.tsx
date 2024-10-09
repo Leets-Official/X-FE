@@ -1,25 +1,28 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function Loading() {
   const router = useRouter();
 
-  //이미 가입한 유저일 시: Home으로 이동
-  const handleHome = () => {
-    router.push("/home");
-  };
+  const redirectTo = (responseCode: 200 | 201) => {
+    const routes = {
+      200: "/home",
+      201: "/birthModal",
+    };
 
-  //처음 가입한 유저일 시: 회원가입 모달 페이지로 이동
-  const handleSignup = () => {
-    router.push("/birthModal");
+    const route = routes[responseCode];
+    if (route) {
+      router.push(route);
+    } else {
+      console.error(`Unexpected response code: ${responseCode}`);
+    }
   };
 
   const params = useSearchParams();
-  console.log(params.get("code"));
   const authCode = params.get("code");
   console.log("authCode: ", authCode);
 
@@ -45,15 +48,19 @@ export default function Loading() {
       const responseCode = res.data.code;
       console.log("responseCode: ", responseCode);
 
-      if (responseCode === 200) {
-        handleHome();
-      } else if (responseCode === 201) {
-        handleSignup();
-      } else {
-        console.error(`Unexpected response code: ${responseCode}`);
-      }
+      redirectTo(responseCode);
     } catch (error) {
-      console.error("Login failed: ", error);
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          console.error("Login failed with response: ", error.response);
+        } else if (error.request) {
+          console.error("No response received: ", error.request);
+        } else {
+          console.error("Error setting up request: ", error.message);
+        }
+      } else {
+        console.error("An unexpected error occurred: ", error);
+      }
     }
   };
 
