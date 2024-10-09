@@ -29,13 +29,12 @@ export default function Loading() {
       return;
     }
 
-    // const encodedCode = encodeURIComponent(authCode);
     const data = { authCode };
     console.log("Sending data:", data);
 
     try {
       const res = await axios.post(
-        "http://43.203.226.98:8080/api/v1/users/login",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/login`,
         data
       );
       console.log("res: ", res);
