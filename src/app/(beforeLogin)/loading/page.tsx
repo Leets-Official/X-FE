@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -10,10 +10,11 @@ export default function Loading() {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
 
+  console.log("접근");
   const redirectTo = (responseCode: 200 | 201) => {
     const routes = {
       200: "/home",
-      201: "/birthModal",
+      201: "/i/flow/single_sign_on",
     };
 
     const route = routes[responseCode];
