@@ -51,6 +51,7 @@ export default function Loading() {
       localStorage.setItem("accesstoken", accessToken);
 
       const responseCode = res.data.code;
+      // const responseCode = 201;
       console.log("responseCode: ", responseCode);
 
       redirectTo(responseCode);
