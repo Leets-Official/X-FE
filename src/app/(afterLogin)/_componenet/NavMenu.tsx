@@ -1,13 +1,13 @@
-"use client";
+"use client"; 
 import { useSelectedLayoutSegment } from "next/navigation";
 import Link from "next/link";
 import styled from "styled-components";
-import Home from "../../../../public/ic_fill_home.svg";
-import Message from "../../../../public/ic_message.svg";
-import Profile from "../../../../public/ic_profile.svg";
-import FillHome from "../../../../public/ic_fill_home.svg";
-import FillMessage from "../../../../public/ic_fill_message.svg";
-import FillProfile from "../../../../public/ic_fill_profile.svg";
+import Home from "@/app/_asset/ic_home.svg";
+import Message from "@/app/_asset/ic_message.svg";
+import Profile from "@/app/_asset/ic_profile.svg";
+import FillHome from "@/app/_asset/ic_fill_home.svg";
+import FillMessage from "@/app/_asset/ic_fill_message.svg";
+import FillProfile from "@/app/_asset/ic_fill_profile.svg";
 
 const NavPill = styled.div`
   display: inline-flex;
@@ -15,10 +15,9 @@ const NavPill = styled.div`
   padding: 12px;
   align-items: center;
   border-radius: 29px;
-  color:
 
   &:hover {
-    background-color: rgba(15, 20, 25, 0.1);
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   & > div {
@@ -46,12 +45,12 @@ export default function NavMenu() {
           <NavPill>
             {segment === "home" ? (
               <>
-                <Home alt="홈 이미지" style={{ fill: "white" }} />
+                <Home alt="홈 이미지" className="w-[24px] h-[24px]" fill="currentColor"  />
                 <div style={{ fontWeight: "bold" }}>Home</div>
               </>
             ) : (
               <>
-                <FillHome alt="선택된 홈 이미지" />
+                <FillHome alt="선택된 홈 이미지" className="w-[24px] h-[24px]" fill="currentColor"  />
                 <div>Home</div>
               </>
             )}
@@ -63,12 +62,12 @@ export default function NavMenu() {
           <NavPill>
             {segment === "messages" ? (
               <>
-                <Message alt="메세지 이미지" />
+                <Message alt="메세지 이미지" className="w-[24px] h-[24px]" fill="currentColor"  />
                 <div style={{ fontWeight: "bold" }}>Messages</div>
               </>
             ) : (
               <>
-                <FillMessage alt="선택된 메시지 이미지" />
+                <FillMessage alt="선택된 메시지 이미지" className="w-[24px] h-[24px]" fill="currentColor"  />
                 <div>Messages</div>
               </>
             )}
@@ -81,12 +80,12 @@ export default function NavMenu() {
             <NavPill>
               {segment === me.id ? (
                 <>
-                  <Profile alt="프로필 이미지" style={{ fill: "white" }} />
+                  <Profile alt="프로필 이미지" className="w-[24px] h-[24px]" fill="currentColor"  />
                   <div style={{ fontWeight: "bold" }}>Profile</div>
                 </>
               ) : (
                 <>
-                  <FillProfile alt="선택된 프로필 이미지" style={{ fill: "white" }} />
+                  <FillProfile alt="선택된 프로필 이미지" className="w-[24px] h-[24px]" fill="currentColor" />
                   <div>Profile</div>
                 </>
               )}
