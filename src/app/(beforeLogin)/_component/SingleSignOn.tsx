@@ -1,12 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SingleSignOn() {
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
   const [year, setYear] = useState("");
-  const [step, setStep] = useState(1); // 현재 모달의 단계를 저장
+  const [step, setStep] = useState(1);
+  const [customId, setCustomId] = useState("");
+  const [accessToken, setAccessToken] = useState("");
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accesstoken");
+    if (accessToken) {
+      setAccessToken(accessToken);
+    }
+  }, []);
 
   const years = Array.from(
     { length: 100 },
@@ -19,11 +31,49 @@ export default function SingleSignOn() {
     setStep(2);
   };
 
+  const handleSubmit = async () => {
+    console.log(accessToken);
+
+    const birth = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    const formattedCustomId = `@${customId}`;
+
+    {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_PATCH_API_URL}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+              birth: birth,
+              customId: formattedCustomId,
+            }),
+          }
+        );
+
+        console.log(response);
+
+        if (!response.ok) {
+          throw new Error("정보를 전송하는데 실패하였습니다.");
+        }
+        return { success: true, message: "성공적으로 정보가 전송되었습니다." };
+      } catch (error) {
+        console.error("Error", error);
+        return { success: false, message: "서버 요청 중 문제가 발생했습니다." };
+      }
+    }
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-opacity-50">
       {step === 1 && (
         <div className="w-96 bg-black text-white p-6 rounded-lg shadow-lg">
-          <h3 className="text-2xl font-bold mb-2">What s your birth date?</h3>
+          <h3 className="text-2xl font-bold mb-2">
+            What&apos;s your birth date?
+          </h3>
           <p className="text-sm mb-4">이 정보는 공개되지 않습니다.</p>
 
           <div className="flex justify-between space-x-4 mb-4">
@@ -110,7 +160,7 @@ export default function SingleSignOn() {
       {step === 2 && (
         <div className="w-96 bg-black text-white p-6 rounded-lg shadow-lg">
           <h3 className="text-2xl font-bold mb-2">이름을 가르쳐 주시겠어요?</h3>
-          <p className="text-sm mb-4">
+          <p className="text-sm mb-4 text-gray-400">
             @사용자 아이디는 고유한 나만의 아이디입니다. 나중에 언제든 바꿀 수
             있습니다.
           </p>
@@ -118,19 +168,21 @@ export default function SingleSignOn() {
           <div className="flex flex-col space-y-4">
             <input
               type="text"
-              placeholder="사용자 아이디"
+              placeholder="@사용자 아이디"
+              value={customId}
+              onChange={(e) => setCustomId(e.target.value)}
               className="appearance-none bg-black border border-gray-300 rounded p-2 text-center w-full"
             />
-            <p className="text-xs text-gray-400">
-              @gbu9874, @bugye1673461{" "}
-              <a href="#" className="text-blue-400 underline">
-                더 보기
-              </a>
-            </p>
           </div>
 
-          <button className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 mt-4 rounded">
-            건너뛰기
+          <button
+            onClick={() => {
+              handleSubmit();
+              router.push("/home");
+            }}
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 mt-4 rounded"
+          >
+            설정하기
           </button>
         </div>
       )}
