@@ -1,6 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Google from "../../../../public/Google.svg";
+import Line from "../../../../public/Line.svg";
 
 export default function LoginModal() {
   const router = useRouter();
@@ -29,8 +31,9 @@ export default function LoginModal() {
   };
 
   return (
-    <div className="w-screen h-screen bg-gray-700 flex justify-center items-center">
-      <div className="max-w-[80vw] min-w-[600px] h-[500px] bg-black rounded-lg">
+    <div className="flex justify-center items-center">
+      <div className="absolute inset-0 opacity-50"></div>
+      <div className="relative max-w-[80vw] min-w-[550px] h-[500px] bg-black rounded-lg">
         <div>
           <button
             className="w-8 h-8 flex justify-center items-center"
@@ -46,8 +49,26 @@ export default function LoginModal() {
             </svg>
           </button>
         </div>
-        <h1 className="text-3xl font-bold">X 가입하기</h1>
-        <button onClick={onClickLogin}>google로 로그인</button>
+        <div className="flex flex-col justify-center items-center flex-grow space-y-6">
+          <h1 className="text-3xl font-bold mb-12">X 가입하기</h1>
+          <div className="flex flex-col justify-center items-center space-y-12">
+            <button
+              onClick={onClickLogin}
+              className="bg-white text-black font-bold text-center rounded-full py-2 px-6 flex items-center"
+            >
+              <Google className="mr-2" />
+              Google 계정으로 가입하기
+            </button>
+            <Line className="rounded-full" />
+            <button
+              onClick={onClickLogin}
+              className="bg-white text-black font-bold text-center rounded-full py-2 px-6 flex items-center"
+            >
+              <Google className="mr-2" />
+              Google 계정으로 로그인하기
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
