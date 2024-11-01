@@ -1,13 +1,13 @@
 "use client"
 
 import styled from "styled-components";
-import DefaultProfileImg from "@/app/_asset/default_profile_img.svg";
+import Image from "next/image";
 
 export default function LogoutButton() {
   const me = { // Temporary user info
     id: 'jini',
     nickname: '이유진',
-    image: DefaultProfileImg,
+    image: '/default_profile_img.svg',
   }
 
   const onLogout = () => {};
@@ -15,7 +15,7 @@ export default function LogoutButton() {
   return (
     <StyledLogoutButton onClick={onLogout}>
       <UserImage>
-        <img src={me.image} alt={me.id} />
+        <Image src={me.image} width={40} height={40} alt="프로필 이미지"/>
       </UserImage>
       <UserName>
         <div>{me.nickname}</div>

@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import Link from "next/link";
 import XLogo from "../../../public/X.svg";
-import PostLogo from "../_asset/ic_small_post.svg";
+import PostLogo from "../../../public/ic_small_post.svg";
 import NavMenu from "./_componenet/NavMenu";
 import LogoutButton from "./_componenet/LogoutButton";
 import FollowRecommend from "./_componenet/FollowRecommend";

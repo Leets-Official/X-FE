@@ -2,12 +2,12 @@
 import { useSelectedLayoutSegment } from "next/navigation";
 import Link from "next/link";
 import styled from "styled-components";
-import Home from "@/app/_asset/ic_home.svg";
-import Message from "@/app/_asset/ic_message.svg";
-import Profile from "@/app/_asset/ic_profile.svg";
-import FillHome from "@/app/_asset/ic_fill_home.svg";
-import FillMessage from "@/app/_asset/ic_fill_message.svg";
-import FillProfile from "@/app/_asset/ic_fill_profile.svg";
+import Home from "../../../../public/ic_home.svg";
+import Message from "../../../../public/ic_message.svg";
+import Profile from "../../../../public/ic_profile.svg";
+import FillHome from "../../../../public/ic_fill_home.svg";
+import FillMessage from "../../../../public/ic_fill_message.svg";
+import FillProfile from "../../../../public/ic_fill_profile.svg";
 
 const NavPill = styled.div`
   display: inline-flex;
