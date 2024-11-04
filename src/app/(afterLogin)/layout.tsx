@@ -7,13 +7,15 @@ import PostLogo from "../../../public/ic_small_post.svg";
 import NavMenu from "./_componenet/NavMenu";
 import LogoutButton from "./_componenet/LogoutButton";
 import FollowRecommend from "./_componenet/FollowRecommend";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
+import { theme } from "@/styles/theme";
 
 type Props = { children: ReactNode; modal: ReactNode };
 
 export default function AfterLoginLayout({ children, modal }: Props) {
   return (
     <Container>
+      <ThemeProvider theme={theme} >
       <LeftSectionWrapper>
         <LeftSection>
           <LeftSectionFixed>
@@ -49,6 +51,7 @@ export default function AfterLoginLayout({ children, modal }: Props) {
         </RightSectionInner>
       </RightSectionWrapper>
       {modal}
+      </ThemeProvider>
     </Container>
   );
 }
@@ -128,7 +131,7 @@ const PostButton = styled(Link)`
   font-size: 17px;
 
   &:hover {
-    background-color: rgb(26, 140, 216);
+    background-color: rgb(29, 155, 240, 0.9);
   }
 
   span {

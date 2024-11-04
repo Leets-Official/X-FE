@@ -8,7 +8,7 @@ const Form = styled.form`
   margin-top: 101px;
   display: flex;
   padding: 16px; /* Adjust padding as needed */
-  border-bottom: 1px solid #71767B;
+  border-bottom: 1px solid ${(props) => props.theme.linecolor};
   background-color: black;
 `;
 
@@ -48,12 +48,8 @@ const Button = styled.button<{ disabled?: boolean }>`
   font-weight: bold;
   font-size: 15px;
   border-radius: 9999px; /* Full rounding */
-  background-color: ${({ disabled }) => (disabled ? '#1D9BF5' : '#2563EB')}; /* Blue color */
+  background-color: ${({ disabled, theme }) => (disabled ? theme.darkerblue : theme.maincolor)};
   transition: background-color 0.2s;
-
-  &:hover {
-    background-color: ${({ disabled }) => (disabled ? 'gray' : '#1D9BF5')}; /* Darker blue */
-  }
 
   &:disabled {
     opacity: 0.5;
@@ -61,21 +57,21 @@ const Button = styled.button<{ disabled?: boolean }>`
 `;
 
 const FileInput = styled.input`
-  display: none; /* Hides the file input */
+  display: none;
 `;
 
 const UploadButton = styled.button`
   width: 32px;
   height: 32px;
-  border-radius: 9999px; /* Full rounding */
-  background-color: rgba(59, 130, 246, 0.01); /* Light blue */
+  border-radius: 9999px;
+  background-color: rgba(59, 130, 246, 0.01);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: rgba(59, 130, 246, 0.1); /* Slightly darker on hover */
+    background-color: rgba(59, 130, 246, 0.1);
   }
 `;
 
