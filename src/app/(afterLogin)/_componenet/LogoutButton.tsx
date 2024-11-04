@@ -40,7 +40,7 @@ const StyledLogoutButton = styled.button`
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: rgba(15, 20, 25, 0.1);
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   @media (min-width: 1300px) {
