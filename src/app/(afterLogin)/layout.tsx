@@ -4,9 +4,9 @@ import { ReactNode } from "react";
 import Link from "next/link";
 import XLogo from "../../../public/X.svg";
 import PostLogo from "../../../public/ic_small_post.svg";
-import NavMenu from "./_componenet/NavMenu";
-import LogoutButton from "./_componenet/LogoutButton";
-import FollowRecommend from "./_componenet/FollowRecommend";
+import NavMenu from "./_component/NavMenu";
+import LogoutButton from "./_component/LogoutButton";
+import FollowRecommend from "./_component/FollowRecommend";
 import styled, { ThemeProvider } from "styled-components";
 import { theme } from "@/styles/theme";
 
