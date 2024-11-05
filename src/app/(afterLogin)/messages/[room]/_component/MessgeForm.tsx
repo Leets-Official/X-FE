@@ -9,6 +9,7 @@ import { ChangeEventHandler, FormEventHandler, KeyboardEventHandler, useEffect, 
 // import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 // import { Message } from "@/model/Message";
 // import { useMessageStore } from "@/store/message";
+import Send from '../../../../../../public/ic_send.svg';
 
 interface Props {
   id: string;
@@ -93,19 +94,14 @@ export default function MessageForm() {
         e.preventDefault();
         onSubmit();
       }}>
-        <TextareaAutosize
+        <Textarea
           value={content}
           onChange={onChangeContent}
           onKeyDown={onEnter}
-          placeholder="새 쪽지 작성하기"
+          placeholder="Start a new message"
         />
         <SubmitButton type="submit" disabled={!content?.trim()}>
-          <svg viewBox="0 0 24 24" width={18} aria-hidden="true">
-            <g>
-              <path
-                d="M2.504 21.866l.526-2.108C3.04 19.719 4 15.823 4 12s-.96-7.719-.97-7.757l-.527-2.109L22.236 12 2.504 21.866zM5.981 13c-.072 1.962-.34 3.833-.583 5.183L17.764 12 5.398 5.818c.242 1.349.51 3.221.583 5.183H10v2H5.981z"></path>
-            </g>
-          </svg>
+          <Send alt="전송 이미지" className="w-[24px] h-[24px] " fill="currentColor" />
         </SubmitButton>
       </Form>
     </FormZone>
@@ -113,7 +109,7 @@ export default function MessageForm() {
 }
 
 const FormZone = styled.div`
-  border-top: 1px solid rgba(239, 243, 244, 1.00);
+  border-top: 1px solid ${(props) => props.theme.linecolor};
   height: 56px;
   display: flex;
   align-items: center;
@@ -121,7 +117,7 @@ const FormZone = styled.div`
 `;
 
 const Form = styled.form`
-  background: rgb(239, 243, 244);
+  background: #303336;
   margin: 4px 12px;
   border-radius: 16px;
   padding: 4px;
@@ -134,12 +130,17 @@ const Form = styled.form`
 const Textarea = styled(TextareaAutosize)`
   width: 100%;
   border: none;
+  padding: 5px 10px 5px 5px;
   background: transparent;
   font-size: 15px;
   line-height: 20px;
   flex: 1;
   outline: none;
+  ::placeholder {
+    color: ${(props) => props.theme.linecolor};
+  }
 `;
+
 
 const SubmitButton = styled.button`
   cursor: pointer;
@@ -151,8 +152,4 @@ const SubmitButton = styled.button`
   height: 34px;
   opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-
-  svg {
-    fill: rgb(29, 155, 240);
-  }
 `;

@@ -23,6 +23,7 @@ const MainContainer = styled.main`
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  position: relative;
   padding: 0 16px;
 `;
 
@@ -66,6 +67,17 @@ const UserImage = styled.img`
 
 const MessageList = styled.div`
   padding-bottom: 24px;
+  flex: 1;
+  overflow-y: auto; 
+`;
+
+const StyledMessageForm = styled(MessageForm)`
+  position: sticky;
+  bottom: 0;
+  background-color: #303336;
+  width: 100%;
+  padding: 8px;
+  border-top: 1px solid ${(props) => props.theme.linecolor};
 `;
 
 const MessageContent = styled.div<{ isMyMessage: boolean }>`
@@ -89,6 +101,7 @@ const MessageDate = styled.div`
   color: ${(props) => props.theme.linecolor};
   font-size: 13px;
 `;
+
 
 export default function ChatRoom() {
   const user = {
@@ -114,35 +127,35 @@ export default function ChatRoom() {
     },
   ];
 
-  return (
-    <MainContainer>
-      <Header>
-        <BackButton />
-        <HeaderTitle>{user.nickname}</HeaderTitle>
-      </Header>
-      <UserInfo href={user.nickname}>
-        <UserImage src={user.image} alt={user.id} />
-        <div>
-          <b>{user.nickname}</b>
-        </div>
-        <UserId>@{user.id}</UserId>
-      </UserInfo>
-      <MessageList>
-        {messages.map((m) => {
-          const isMyMessage = m.id === "zerohch0"; // 내 메시지인지 확인
-          return (
-            <MessageWrapper key={m.messageId} isMyMessage={isMyMessage}>
-              <MessageContent isMyMessage={isMyMessage}>
-                {m.content}
-              </MessageContent>
-              <MessageDate>
-                {dayjs(m.createdAt).format("YYYY년 MM월 DD일 A HH시 mm분")}
-              </MessageDate>
-            </MessageWrapper>
-          );
-        })}
-      </MessageList>
-      <MessageForm />
-    </MainContainer>
-  );
+    return (
+      <MainContainer>
+        <Header>
+          <BackButton />
+          <HeaderTitle>{user.nickname}</HeaderTitle>
+        </Header>
+        <UserInfo href={user.nickname}>
+          <UserImage src={user.image} alt={user.id} />
+          <div>
+            <b>{user.nickname}</b>
+          </div>
+          <UserId>@{user.id}</UserId>
+        </UserInfo>
+        <MessageList>
+          {messages.map((m) => {
+            const isMyMessage = m.id === "zerohch0";
+            return (
+              <MessageWrapper key={m.messageId} isMyMessage={isMyMessage}>
+                <MessageContent isMyMessage={isMyMessage}>
+                  {m.content}
+                </MessageContent>
+                <MessageDate>
+                  {dayjs(m.createdAt).format("YYYY년 MM월 DD일 A HH시 mm분")}
+                </MessageDate>
+              </MessageWrapper>
+            );
+          })}
+        </MessageList>
+        <StyledMessageForm />
+      </MainContainer>
+    );
 }
