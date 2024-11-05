@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import X from "../../../../public/X.svg";
@@ -40,26 +41,22 @@ export default function SingleSignOn() {
 
     {
       try {
-        const response = await fetch(
+        const response = await axios.patch(
           `${process.env.NEXT_PUBLIC_PATCH_API_URL}`,
           {
-            method: "PATCH",
+            birth: birth,
+            customId: formattedCustomId,
+          },
+          {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${accessToken}`,
             },
-            body: JSON.stringify({
-              birth: birth,
-              customId: formattedCustomId,
-            }),
           }
         );
 
         console.log(response);
 
-        if (!response.ok) {
-          throw new Error("정보를 전송하는데 실패하였습니다.");
-        }
         return { success: true, message: "성공적으로 정보가 전송되었습니다." };
       } catch (error) {
         console.error("Error", error);
