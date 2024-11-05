@@ -50,8 +50,8 @@ export default function Loading() {
       const accessToken = res.data.data.jwtToken.accessToken;
       localStorage.setItem("accesstoken", accessToken);
 
-      // const responseCode = res.data.code;
-      const responseCode = 201;
+      const responseCode = res.data.code;
+      // const responseCode = 201;
       console.log("responseCode: ", responseCode);
 
       redirectTo(responseCode);
