@@ -32,7 +32,7 @@ export default function LoginModal() {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center">
+    <div className="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm flex justify-center items-center">
       <div className="relative max-w-[80vw] min-w-[550px] h-[500px] bg-black rounded-lg">
         <div className="flex">
           <button
