@@ -9,11 +9,13 @@ export default function Loading() {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [authChecked, setAuthChecked] = useState(false);
 
+  console.log("접근");
   const redirectTo = (responseCode: 200 | 201) => {
     const routes = {
       200: "/home",
-      201: "/birthModal",
+      201: "/i/flow/single_sign_on",
     };
 
     const route = routes[responseCode];
@@ -50,6 +52,7 @@ export default function Loading() {
       localStorage.setItem("accesstoken", accessToken);
 
       const responseCode = res.data.code;
+      // const responseCode = 201;
       console.log("responseCode: ", responseCode);
 
       redirectTo(responseCode);
@@ -74,18 +77,19 @@ export default function Loading() {
   };
 
   useEffect(() => {
-    if (authCode) {
+    if (authCode && loading) {
       handleLoginPost();
-    } else {
+    } else if (!authCode) {
       console.error("Google authorization code not found.");
       setErrorMessage("Google authorization code를 찾을 수 없습니다.");
       setLoading(false);
     }
-  }, [authCode]);
+    setAuthChecked(true);
+  }, [authCode, loading]);
 
   return (
-    <div>
-      {loading ? (
+    <div className="justify-center">
+      {loading && authChecked ? (
         <h2>로그인중입니다.</h2>
       ) : errorMessage ? (
         <div>
