@@ -4,6 +4,11 @@ import { ReactNode } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/navigation";
 
+type Image = {
+  link: string;
+  imageId: number;
+};
+
 type Props = {
   children: ReactNode;
   post: {
@@ -15,7 +20,7 @@ type Props = {
       image: string;
     };
     createdAt: Date;
-    Images: any[];
+    Images: Image[];
   };
 };
 

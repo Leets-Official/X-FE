@@ -1,6 +1,11 @@
 import Link from "next/link";
 import styled from "styled-components";
 
+type Image = {
+  link: string;
+  imageId: number;
+};
+
 type Props = {
   post: {
     postId: number;
@@ -11,7 +16,7 @@ type Props = {
       image: string;
     };
     createdAt: Date;
-    Images: any[];
+    Images: Image[];
   };
 };
 
@@ -31,7 +36,7 @@ export default function PostImages({ post }: Props) {
       case 2:
         return (
           <DoubleImage>
-            {post.Images.map((image, index) => (
+            {post.Images.map((image) => (
               <ImageLink
                 key={image.imageId}
                 href={`/${post.User.id}/status/${post.postId}/photo/${image.imageId}`}
@@ -40,7 +45,6 @@ export default function PostImages({ post }: Props) {
             ))}
           </DoubleImage>
         );
-      // Add cases for 3 and 4 images, with similar styled components
       default:
         return null;
     }
@@ -49,7 +53,6 @@ export default function PostImages({ post }: Props) {
   return <ImageSection>{renderImages()}</ImageSection>;
 }
 
-// Styled Components
 const ImageSection = styled.div`
   margin-top: 12px;
   width: 100%;

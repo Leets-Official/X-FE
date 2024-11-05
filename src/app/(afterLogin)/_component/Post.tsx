@@ -3,14 +3,14 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
 import styled from "styled-components";
 import Link from "next/link";
+import PostArticle from "./PostArticle";
+import PostImages from "./PostImages";
+import ActionButtons from "./ActionButtons";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
-type Props = {
-  noImage?: boolean;
-};
-export default function Post({ noImage }: Props) {
+export default function Post() {
   const target = {
     postId: 1,
     User: {
@@ -20,13 +20,9 @@ export default function Post({ noImage }: Props) {
     },
     content: "X 클론코딩 하는 중",
     createdAt: new Date(),
-    Images: [
-      {
-        imageId: 1,
-        link: "/jiwon.jpg",
-      },
-    ],
+    Images: [{ link: "/jiwon.jpg", imageId: 1 }],
   };
+
   return (
     <PostArticle post={target}>
       <PostWrapper>
@@ -57,7 +53,6 @@ export default function Post({ noImage }: Props) {
   );
 }
 
-// Styled Components
 const PostWrapper = styled.div`
   display: flex;
   flex-direction: row;
