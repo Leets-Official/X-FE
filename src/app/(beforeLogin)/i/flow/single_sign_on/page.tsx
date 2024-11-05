@@ -1,4 +1,4 @@
-import SingleSignOn from "@/app/(beforeLogin)/_component/SingleSignOn";
+import SingleSignOn from "@/(beforeLogin)/_component/SingleSignOn";
 
 export default function Page() {
   return <SingleSignOn />;

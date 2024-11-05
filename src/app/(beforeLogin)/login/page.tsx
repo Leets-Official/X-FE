@@ -1,6 +1,6 @@
 "use client";
 
-import Main from "@/app/(beforeLogin)/_component/Main";
+import Main from "@/(beforeLogin)/_component/Main";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
