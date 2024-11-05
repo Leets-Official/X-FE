@@ -11,19 +11,19 @@ export default function Followers() {
   const user = {
     id: "@jiwon",
     nickname: "지원",
-    image: "/jiwon.jpg",
+    image: "/default_profile_img.svg",
   };
 
   const followingList = [
     {
       id: "JzunyY123",
       name: "문석준/기계·스마트·산업공학부(산업공학전공)",
-      profileImage: "/jiwon.jpg",
+      profileImage: "/default_profile_img.svg",
     },
     {
       id: "NetflixKR",
       name: "Netflix Korea | 넷플릭스 코리아",
-      profileImage: "/jiwon.jpg",
+      profileImage: "/default_profile_img.svg",
     },
   ];
 

@@ -12,8 +12,8 @@ export default function Profile() {
   const user = {
     id: "jiwon",
     nickname: "지원",
-    image: "/jiwon.jpg",
-    backgroundImage: "/jiwon.jpg",
+    image: "/default_profile_img.svg",
+    backgroundImage: "/backgroundImage.jpg",
     message: "welcome to my profile!",
   };
 

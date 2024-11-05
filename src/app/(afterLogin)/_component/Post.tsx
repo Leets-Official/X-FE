@@ -16,11 +16,11 @@ export default function Post() {
     User: {
       id: "jiwon",
       nickname: "지원",
-      image: "/jiwon.jpg",
+      image: "/default_profile_img.svg",
     },
     content: "X 클론코딩 하는 중",
     createdAt: new Date(),
-    Images: [{ link: "/jiwon.jpg", imageId: 1 }],
+    Images: [{ link: "/default_profile_img.jpg", imageId: 1 }],
   };
 
   return (
