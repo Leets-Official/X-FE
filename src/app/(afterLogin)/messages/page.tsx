@@ -1,4 +1,4 @@
-import Room from "./_component/Room";
+import ChatRoom from "./_component/ChatRoom";
 
 export default function Home() {
   return (
@@ -6,12 +6,10 @@ export default function Home() {
       <div className="h-[53px] flex items-center px-4">
         <h3 className="font-bold text-[20px]">Messages</h3>
       </div>
-      <Room />
-      <Room />
-      <Room />
-      <Room />
-      <Room />
-      <Room />
+      <ChatRoom />
+      <ChatRoom />
+      <ChatRoom />
+      <ChatRoom />
     </main>
   );
 }

@@ -10,7 +10,7 @@ import "dayjs/locale/ko";
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
-export default function Room() {
+export default function ChatRoom() {
   const router = useRouter();
   const user = {
     id: "hero",
@@ -34,7 +34,6 @@ export default function Room() {
       <RoomChatInfo>
         <RoomUserInfo>
           <UserName>{user.nickname}</UserName>
-          &nbsp;
           <span>@{user.id}&nbsp;·&nbsp;</span>
           <PostDate>{dayjs(user.Messages?.at(-1)?.createdAt).fromNow(true)}</PostDate>
         </RoomUserInfo>
@@ -76,15 +75,12 @@ const RoomChatInfo = styled.div`
   flex-direction: column;
   color: ${(props) => props.theme.linecolor};
   font-size: 15px;
-
-  b {
-    color: black;
-  }
 `;
 
 const UserName = styled.div`
   color: #ffff;
   font-weight: bold;
+  padding-right: 5px;
 `
 
 const RoomUserInfo = styled.div`

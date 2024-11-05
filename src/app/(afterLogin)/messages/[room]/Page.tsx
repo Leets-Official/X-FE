@@ -141,15 +141,15 @@ export default function ChatRoom() {
           <UserId>@{user.id}</UserId>
         </UserInfo>
         <MessageList>
-          {messages.map((m) => {
-            const isMyMessage = m.id === "zerohch0";
+          {messages.map((message) => {
+            const isMyMessage = message.id === "zerohch0";
             return (
-              <MessageWrapper key={m.messageId} isMyMessage={isMyMessage}>
+              <MessageWrapper key={message.messageId} isMyMessage={isMyMessage}>
                 <MessageContent isMyMessage={isMyMessage}>
-                  {m.content}
+                  {message.content}
                 </MessageContent>
                 <MessageDate>
-                  {dayjs(m.createdAt).format("YYYY년 MM월 DD일 A HH시 mm분")}
+                  {dayjs(message.createdAt).format("YYYY년 MM월 DD일 A HH시 mm분")}
                 </MessageDate>
               </MessageWrapper>
             );
