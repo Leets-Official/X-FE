@@ -66,7 +66,7 @@ export default function SingleSignOn() {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-opacity-70 backdrop-blur-sm z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-15 backdrop-blur-sm z-50">
       {step === 1 && (
         <div className="w-[450px] h-[550px] bg-black text-white p-8 rounded-lg flex flex-col justify-between">
           <X className="w-8 h-8 fill-white ml-[50%]" />

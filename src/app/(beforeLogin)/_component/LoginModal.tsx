@@ -32,11 +32,11 @@ export default function LoginModal() {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm flex justify-center items-center">
+    <div className="fixed inset-0 bg-white bg-opacity-15 backdrop-blur-sm flex justify-center items-center">
       <div className="relative max-w-[80vw] min-w-[550px] h-[500px] bg-black rounded-lg">
         <div className="flex">
           <button
-            className="w-8 h-8 flex justify-center items-center"
+            className="w-8 h-8 flex justify-center items-center mt-[5px] ml-[5px]"
             onClick={onClickClose}
           >
             <svg
@@ -48,10 +48,10 @@ export default function LoginModal() {
               <path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z" />
             </svg>
           </button>
-          <X className="ml-[42%] mb-[15px] w-8 h-8 fill-white" />
+          <X className="ml-[42%] mb-[15px] mt-[10px] w-8 h-8 fill-white" />
         </div>
         <div className="flex flex-col justify-center items-center flex-grow space-y-6">
-          <h1 className="text-3xl font-bold mb-12">X 가입하기</h1>
+          <h1 className="text-3xl font-bold mb-12 mt-[15px]">X 가입하기</h1>
           <div className="flex flex-col justify-center items-center space-y-12">
             <button
               onClick={onClickLogin}
