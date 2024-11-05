@@ -5,12 +5,39 @@ import styled from "styled-components";
 import BackButton from "../_component/BackButton";
 import Tab from "./_component/Tab";
 import TabProvider from "./_component/TabProvider";
+import Post from "../_component/Post";
+import { useRouter } from "next/navigation";
 
 export default function Profile() {
   const user = {
     id: "jiwon",
     nickname: "지원",
     image: "/jiwon.jpg",
+    backgroundImage: "/jiwon.jpg",
+    message: "welcome to my profile!",
+  };
+
+  const followingList = [
+    { id: "JzunyY123", name: "문석준", profileImage: "/jiwon.jpg" },
+    { id: "NetflixKR", name: "Netflix Korea", profileImage: "/jiwon.jpg" },
+  ];
+
+  const followerList = [
+    { id: "JzunyY123", name: "문석준", profileImage: "/jiwon.jpg" },
+    { id: "NetflixKR", name: "Netflix Korea", profileImage: "/jiwon.jpg" },
+  ];
+
+  const currentUserId = "jiwon";
+  const isOwnProfile = user.id === currentUserId;
+
+  const router = useRouter();
+
+  const onClickFollowing = () => {
+    router.push(`/${user.id}/following`);
+  };
+
+  const onClickFollowers = () => {
+    router.push(`/${user.id}/followers`);
   };
 
   return (
@@ -20,18 +47,37 @@ export default function Profile() {
           <BackButton />
           <HeaderTitle>{user.nickname}</HeaderTitle>
         </Header>
-        <Tab />
+        <BackgroundImage src={user.backgroundImage} alt="Background Image" />
         <UserZone>
-          <UserImage>
-            <img src={user.image} alt={user.id} />
-          </UserImage>
+          <ProfileHeader>
+            <UserImage>
+              <img src={user.image} alt={user.id} />
+            </UserImage>
+            {isOwnProfile ? (
+              <EditProfileButton>Edit profile</EditProfileButton>
+            ) : (
+              <FollowButton>Follow</FollowButton>
+            )}
+          </ProfileHeader>
           <UserName>
-            <div>{user.nickname}</div>
-            <div>@{user.id}</div>
+            <Nickname>{user.nickname}</Nickname>
+            <UserId>@{user.id}</UserId>
           </UserName>
-          <FollowButton>팔로우</FollowButton>
+          <Message>{user.message}</Message>
+          <UserStats>
+            <StatButton onClick={onClickFollowing}>
+              <BoldText>{followingList.length}</BoldText> Following
+            </StatButton>
+            <StatButton onClick={onClickFollowers}>
+              <BoldText>{followerList.length}</BoldText> Followers
+            </StatButton>
+          </UserStats>
         </UserZone>
-        <PostList></PostList>
+        <Tab />
+        <Divider />
+        <PostList>
+          <Post />
+        </PostList>
       </Main>
     </TabProvider>
   );
@@ -39,7 +85,7 @@ export default function Profile() {
 
 const Main = styled.main`
   width: 600px;
-  border-color: rgb(239, 243, 244);
+  border-color: #71767b;
   border-right-width: 1px;
   border-left-width: 1px;
   border-left-style: solid;
@@ -47,6 +93,14 @@ const Main = styled.main`
   display: flex;
   flex-direction: column;
   align-items: stretch;
+`;
+
+const BackgroundImage = styled.img`
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  position: relative;
+  z-index: 1;
 `;
 
 const Header = styled.div`
@@ -63,26 +117,42 @@ const HeaderTitle = styled.h3`
 
 const UserZone = styled.div`
   display: flex;
+  flex-direction: column;
+  padding: 16px;
+  position: relative;
+  z-index: 2;
+  background-color: #000;
+`;
+
+const ProfileHeader = styled.div`
+  display: flex;
   align-items: center;
-  border-bottom: 1px solid rgb(239, 243, 244);
-  padding: 12px 16px;
+  gap: 12px;
+  margin-bottom: 8px;
 `;
 
 const UserImage = styled.div`
   display: flex;
-  align-items: center;
   margin-right: 12px;
+  width: 134px;
+  height: 134px;
   border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 12px;
+  margin-top: -90px;
 
   img {
-    width: 134px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     border-radius: 50%;
   }
 `;
 
 const UserName = styled.div`
   margin: 0 12px;
-  flex: 1;
+  flex-direction: column;
+  margin-bottom: 10px;
 
   > div:first-child {
     font-weight: bold;
@@ -91,7 +161,25 @@ const UserName = styled.div`
 
   > div:last-child {
     font-size: 15px;
+    color: #71767b;
   }
+`;
+
+const Nickname = styled.div`
+  font-weight: bold;
+  font-size: 20px;
+`;
+
+const UserId = styled.div`
+  font-size: 15px;
+  color: #71767b;
+`;
+
+const Message = styled.div`
+  margin: 0 12px;
+  margin-top: 8px;
+  font-size: 14px;
+  color: white;
 `;
 
 const FollowButton = styled.button`
@@ -106,6 +194,7 @@ const FollowButton = styled.button`
   font-size: 15px;
   color: white;
   cursor: pointer;
+  margin-left: 50%;
 
   &:hover {
     background-color: rgb(39, 44, 48);
@@ -115,4 +204,54 @@ const FollowButton = styled.button`
 const PostList = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const UserStats = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin: 12px;
+`;
+
+const EditProfileButton = styled.button`
+  border: 1px solid rgb(207, 217, 222);
+  padding: 0 16px;
+  border-radius: 17px;
+  height: 34px;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: white;
+  cursor: pointer;
+  margin-left: 50%;
+
+  &:hover {
+    background-color: rgb(39, 44, 48);
+  }
+`;
+
+const StatButton = styled.button`
+  color: #71767b;
+  cursor: pointer;
+  font-size: 15px;
+
+  &:hover {
+    text-decoration: none;
+  }
+`;
+
+const BoldText = styled.span`
+  font-weight: bold;
+  color: white;
+`;
+
+const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: #71767b;
+  margin-top: 8px;
+  margin-bottom: 8px;
 `;
