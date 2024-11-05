@@ -35,8 +35,7 @@ export default function Room() {
         <RoomUserInfo>
           <UserName>{user.nickname}</UserName>
           &nbsp;
-          <span>@{user.id}</span>
-          &nbsp; · &nbsp;
+          <span>@{user.id}&nbsp;·&nbsp;</span>
           <PostDate>{dayjs(user.Messages?.at(-1)?.createdAt).fromNow(true)}</PostDate>
         </RoomUserInfo>
         <div>{user.Messages?.at(-1)?.content}</div>
