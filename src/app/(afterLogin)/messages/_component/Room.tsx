@@ -33,7 +33,7 @@ export default function Room() {
       </RoomUserImage>
       <RoomChatInfo>
         <RoomUserInfo>
-          <b>{user.nickname}</b>
+          <UserName>{user.nickname}</UserName>
           &nbsp;
           <span>@{user.id}</span>
           &nbsp; · &nbsp;
@@ -75,7 +75,7 @@ const RoomUserImage = styled.div`
 const RoomChatInfo = styled.div`
   display: flex;
   flex-direction: column;
-  color: #536471;
+  color: ${(props) => props.theme.linecolor};
   font-size: 15px;
 
   b {
@@ -83,15 +83,20 @@ const RoomChatInfo = styled.div`
   }
 `;
 
+const UserName = styled.div`
+  color: #ffff;
+  font-weight: bold;
+`
+
 const RoomUserInfo = styled.div`
   display: flex;
   align-items: center;
   color: white;
   span {
-    color: #536471;
+    color: ${(props) => props.theme.linecolor};
   }
 `;
 
 const PostDate = styled.span`
-  color: #536471;
+  color: ${(props) => props.theme.linecolor};
 `;
