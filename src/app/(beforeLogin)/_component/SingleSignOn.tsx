@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import X from "../../../../public/X.svg";
 
 export default function SingleSignOn() {
   const [month, setMonth] = useState("");
@@ -68,13 +69,12 @@ export default function SingleSignOn() {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-opacity-70 backdrop-blur-sm z-50">
       {step === 1 && (
-        <div className="w-96 bg-black text-white p-6 rounded-lg shadow-lg">
-          <h3 className="text-2xl font-bold mb-2">
-            What&apos;s your birth date?
-          </h3>
-          <p className="text-sm mb-4">이 정보는 공개되지 않습니다.</p>
+        <div className="w-[450px] h-[550px] bg-black text-white p-8 rounded-lg flex flex-col justify-between">
+          <X className="w-8 h-8 fill-white ml-[50%]" />
+          <h3 className="text-2xl font-bold">What&apos;s your birth date?</h3>
+          <p className="text-sm">이 정보는 공개되지 않습니다.</p>
 
           <div className="flex justify-between space-x-4 mb-4">
             <div className="relative">
@@ -150,7 +150,7 @@ export default function SingleSignOn() {
 
           <button
             onClick={handleNextStep}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded"
+            className="w-full bg-white text-black font-bold hover:bg-gray-100 py-2 rounded"
           >
             가입하기
           </button>
@@ -158,29 +158,33 @@ export default function SingleSignOn() {
       )}
 
       {step === 2 && (
-        <div className="w-96 bg-black text-white p-6 rounded-lg shadow-lg">
-          <h3 className="text-2xl font-bold mb-2">이름을 가르쳐 주시겠어요?</h3>
-          <p className="text-sm mb-4 text-gray-400">
-            @사용자 아이디는 고유한 나만의 아이디입니다. 나중에 언제든 바꿀 수
-            있습니다.
-          </p>
+        <div className="w-[450px] h-[550px] bg-black text-white p-10 rounded-lg flex flex-col justify-between">
+          <div>
+            <X className="w-8 h-8 fill-white ml-[50%]" />
+            <h3 className="text-2xl font-bold mb-2 mt-5">
+              이름을 가르쳐 주시겠어요?
+            </h3>
+            <p className="text-sm text-gray-400">
+              @사용자 아이디는 고유한 나만의 아이디입니다. 나중에 언제든 바꿀 수
+              있습니다.
+            </p>
 
-          <div className="flex flex-col space-y-4">
-            <input
-              type="text"
-              placeholder="@사용자 아이디"
-              value={customId}
-              onChange={(e) => setCustomId(e.target.value)}
-              className="appearance-none bg-black border border-gray-300 rounded p-2 text-center w-full"
-            />
+            <div className="flex flex-col space-y-4 mt-10">
+              <input
+                type="text"
+                placeholder="@사용자 아이디"
+                value={customId}
+                onChange={(e) => setCustomId(e.target.value)}
+                className="appearance-none bg-black border border-gray-300 rounded p-2 text-center w-full"
+              />
+            </div>
           </div>
-
           <button
             onClick={() => {
               handleSubmit();
               router.push("/home");
             }}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 mt-4 rounded"
+            className="w-full bg-white text-black font-bold hover:bg-gray-100 py-2 rounded"
           >
             설정하기
           </button>
