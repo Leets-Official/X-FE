@@ -1,4 +1,4 @@
-//username의 page
+import Room from "./_component/Room";
 export default function Meesage() {
-  return <main>메세지</main>;
+  return <main><Room /></main>;
 }
