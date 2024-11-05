@@ -4,9 +4,9 @@ import { ReactNode } from "react";
 import Link from "next/link";
 import XLogo from "../../../public/X.svg";
 import PostLogo from "../../../public/ic_small_post.svg";
-import NavMenu from "./_componenet/NavMenu";
-import LogoutButton from "./_componenet/LogoutButton";
-import FollowRecommend from "./_componenet/FollowRecommend";
+import NavMenu from "./_component/NavMenu";
+import LogoutButton from "./_component/LogoutButton";
+import FollowRecommend from "./_component/FollowRecommend";
 import styled, { ThemeProvider } from "styled-components";
 import { theme } from "@/styles/theme";
 
@@ -15,42 +15,50 @@ type Props = { children: ReactNode; modal: ReactNode };
 export default function AfterLoginLayout({ children, modal }: Props) {
   return (
     <Container>
-      <ThemeProvider theme={theme} >
-      <LeftSectionWrapper>
-        <LeftSection>
-          <LeftSectionFixed>
-            <Logo href="/home">
-              <LogoPill>
-                <XLogo alt="X.com 로고" className="w-[24px] h-[24px]" fill="currentColor" />
-              </LogoPill>
-            </Logo>
-            <nav>
-              <ul>
-                <NavMenu />
-              </ul>
-              <PostButton href="/compose/tweet">
-                <span>게시하기</span>
-                <PostLogo className="w-[24px] h-[24px]" fill="currentColor" alt="게시 이미지" />
-              </PostButton>
-            </nav>
-            <LogoutButton />
-          </LeftSectionFixed>
-        </LeftSection>
-      </LeftSectionWrapper>
-      <RightSectionWrapper>
-        <RightSectionInner>
-          <Main>{children}</Main>
-          <RightSection>
-            <FollowRecommendContainer>
-              <h3>팔로우 추천</h3>
-              <FollowRecommend />
-              <FollowRecommend />
-              <FollowRecommend />
-            </FollowRecommendContainer>
-          </RightSection>
-        </RightSectionInner>
-      </RightSectionWrapper>
-      {modal}
+      <ThemeProvider theme={theme}>
+        <LeftSectionWrapper>
+          <LeftSection>
+            <LeftSectionFixed>
+              <Logo href="/home">
+                <LogoPill>
+                  <XLogo
+                    alt="X.com 로고"
+                    className="w-[24px] h-[24px]"
+                    fill="currentColor"
+                  />
+                </LogoPill>
+              </Logo>
+              <nav>
+                <ul>
+                  <NavMenu />
+                </ul>
+                <PostButton href="/compose/tweet">
+                  <span>게시하기</span>
+                  <PostLogo
+                    className="w-[24px] h-[24px]"
+                    fill="currentColor"
+                    alt="게시 이미지"
+                  />
+                </PostButton>
+              </nav>
+              <LogoutButton />
+            </LeftSectionFixed>
+          </LeftSection>
+        </LeftSectionWrapper>
+        <RightSectionWrapper>
+          <RightSectionInner>
+            <Main>{children}</Main>
+            <RightSection>
+              <FollowRecommendContainer>
+                <h3>팔로우 추천</h3>
+                <FollowRecommend />
+                <FollowRecommend />
+                <FollowRecommend />
+              </FollowRecommendContainer>
+            </RightSection>
+          </RightSectionInner>
+        </RightSectionWrapper>
+        {modal}
       </ThemeProvider>
     </Container>
   );
