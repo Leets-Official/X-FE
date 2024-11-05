@@ -7,6 +7,7 @@ import styled from "styled-components";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
 import dayjs from "dayjs";
+import MessageForm from "./_component/MessgeForm";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
@@ -14,7 +15,7 @@ dayjs.extend(relativeTime);
 const MainContainer = styled.main`
   width: 600px;
   min-height: 100dvh;
-  border-color: rgb(239, 243, 244);
+  border-color: ${(props) => props.theme.linecolor};
   border-right-width: 1px;
   border-left-width: 1px;
   border-left-style: solid;
@@ -43,14 +44,18 @@ const UserInfo = styled(Link)`
   flex-direction: column;
   transition-property: background-color;
   transition-duration: 0.2s;
-  border-color: rgb(239, 243, 244);
+  border-color: ${(props) => props.theme.linecolor};
   cursor: pointer;
-  border-bottom: 1px solid rgb(239, 243, 244);
+  border-bottom: 1px solid ${(props) => props.theme.linecolor};;
   margin-bottom: 20px;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.03);
+    background-color: rgba(255, 255, 255, 0.1);
   }
+`;
+const UserId = styled.div`
+  color: ${(props) => props.theme.linecolor};
+  font-size: 13px;
 `;
 
 const UserImage = styled.img`
@@ -67,13 +72,11 @@ const MessageContent = styled.div<{ isMyMessage: boolean }>`
   line-height: 20px;
   padding: 12px 16px;
   font-size: 15px;
-  border-top-left-radius: 22px;
-  border-top-right-radius: 22px;
-  border-bottom-left-radius: 22px;
-  color: ${({ isMyMessage }) => (isMyMessage ? "white" : "black")};
-  background-color: ${({ isMyMessage}) =>
-    isMyMessage ? "#0083eb" : "#eff3f4"};
+  border-radius: ${(props) => (props.isMyMessage ? '22px 22px 0 22px' : '22px 22px 22px 0')};
+  background-color: ${(props) => (props.isMyMessage ? 'rgb(29, 155, 240)' : '#303336')};
+  color: white;
 `;
+
 
 const MessageWrapper = styled.div<{ isMyMessage: boolean }>`
   display: flex;
@@ -83,7 +86,7 @@ const MessageWrapper = styled.div<{ isMyMessage: boolean }>`
 
 const MessageDate = styled.div`
   margin-top: 8px;
-  color: #536471;
+  color: ${(props) => props.theme.linecolor};
   font-size: 13px;
 `;
 
@@ -122,7 +125,7 @@ export default function ChatRoom() {
         <div>
           <b>{user.nickname}</b>
         </div>
-        <div>@{user.id}</div>
+        <UserId>@{user.id}</UserId>
       </UserInfo>
       <MessageList>
         {messages.map((m) => {
@@ -139,6 +142,7 @@ export default function ChatRoom() {
           );
         })}
       </MessageList>
+      <MessageForm />
     </MainContainer>
   );
 }
