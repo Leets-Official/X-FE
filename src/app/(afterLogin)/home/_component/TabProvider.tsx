@@ -1,20 +1,21 @@
-"use client";
+"use client"
 
-import { createContext, ReactNode, useState } from "react";
+import { ReactNode, createContext, useState, Dispatch, SetStateAction } from "react";
 
 type TabContextType = {
-  tab: "post" | "like";
-  setTab: (value: "post" | "like") => void;
+  tab: 'rec' | 'fol';
+  setTab: Dispatch<SetStateAction<'rec' | 'fol'>>;
 };
 
 export const TabContext = createContext<TabContextType>({
-  tab: "post",
+  tab: 'rec',
   setTab: () => {},
 });
 
 type Props = { children: ReactNode };
+
 export default function TabProvider({ children }: Props) {
-  const [tab, setTab] = useState<"post" | "like">("post");
+  const [tab, setTab] = useState<'rec' | 'fol'>('rec');
 
   return (
     <TabContext.Provider value={{ tab, setTab }}>

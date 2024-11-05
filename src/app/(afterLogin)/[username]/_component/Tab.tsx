@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
+import { TabContext } from "./TabProvider";
 
 export default function Tab() {
-  const [tab, setTab] = useState("post");
+  const tabContext = useContext(TabContext);
+
+  const { tab, setTab } = tabContext;
 
   const onClickPost = () => {
     setTab("post");
@@ -16,13 +19,13 @@ export default function Tab() {
   return (
     <Main>
       <HomeTab>
-        <TabOption onClick={onClickPost}>
+        <TabOption onClick={onClickPost} isSelected={tab === "post"}>
           게시물
-          <TabIndicator hidden={tab === "like"} />
+          {tab === "post" && <TabIndicator />}
         </TabOption>
-        <TabOption onClick={onClickLike}>
+        <TabOption onClick={onClickLike} isSelected={tab === "like"}>
           마음에 들어요
-          <TabIndicator hidden={tab === "post"} />
+          {tab === "like" && <TabIndicator />}
         </TabOption>
       </HomeTab>
     </Main>
@@ -30,23 +33,23 @@ export default function Tab() {
 }
 
 const Main = styled.main`
-  width: 600px;
-  border-color: rgb(239, 243, 244);
-  border-right-width: 1px;
-  border-left-width: 1px;
-  border-left-style: solid;
-  border-right-style: solid;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  border: none;
 `;
 
 const HomeTab = styled.div`
   height: 53px;
   display: flex;
+  border: none;
 `;
 
-const TabOption = styled.div`
+interface TabOptionProps {
+  isSelected: boolean;
+}
+
+const TabOption = styled.div<TabOptionProps>`
   flex: 1;
   display: flex;
   align-items: center;
@@ -54,6 +57,9 @@ const TabOption = styled.div`
   font-size: 15px;
   cursor: pointer;
   position: relative;
+  color: ${(props) => (props.isSelected ? "white" : "#71767b")};
+  font-weight: ${(props) => (props.isSelected ? "bold" : "normal")};
+  border: none;
 
   &:hover {
     background-color: rgba(15, 20, 25, 0.1);
@@ -61,12 +67,12 @@ const TabOption = styled.div`
 `;
 
 const TabIndicator = styled.div`
-  height: 4px;
-  align-self: center;
-  background-color: rgb(29, 155, 240);
-  min-width: 56px;
-  width: 56px;
   position: absolute;
-  bottom: 0px;
+  bottom: 4px;
+  height: 3px;
+  width: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgb(29, 155, 240);
   border-radius: 9999px;
 `;
