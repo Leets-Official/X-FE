@@ -16,8 +16,8 @@ export default function Room() {
     id: "hero",
     nickname: "영웅",
     Messages: [
-      { roomId: 1, content: "안녕하세요.", createdAt: new Date() },
-      { roomId: 2, content: "안녕히가세요.", createdAt: new Date() },
+      { roomId: 123, content: "안녕하세요.", createdAt: new Date() },
+      { roomId: 123, content: "안녕히가세요.", createdAt: new Date() },
     ],
   };
 
