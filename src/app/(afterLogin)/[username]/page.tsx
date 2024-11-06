@@ -7,6 +7,7 @@ import Tab from "./_component/Tab";
 import TabProvider from "./_component/TabProvider";
 import Post from "../_component/Post";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Profile() {
   const user = {
@@ -27,10 +28,18 @@ export default function Profile() {
     { id: "NetflixKR", name: "Netflix Korea", profileImage: "/jiwon.jpg" },
   ];
 
-  const currentUserId = "jiwon";
-  const isOwnProfile = user.id === currentUserId;
+  const [currentUserId, setCurrentUserId] = useState(user.id);
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    setCurrentUserId(user.id);
+  }, [user.id]);
+
+  useEffect(() => {
+    setIsOwnProfile(user.id === currentUserId);
+  }, [user.id, currentUserId]);
 
   const onClickFollowing = () => {
     router.push(`/${user.id}/following`);
@@ -38,6 +47,10 @@ export default function Profile() {
 
   const onClickFollowers = () => {
     router.push(`/${user.id}/followers`);
+  };
+
+  const onEditProfile = () => {
+    router.push(`/settings/profile`);
   };
 
   return (
@@ -54,7 +67,9 @@ export default function Profile() {
               <img src={user.image} alt={user.id} />
             </UserImage>
             {isOwnProfile ? (
-              <EditProfileButton>Edit profile</EditProfileButton>
+              <EditProfileButton onClick={onEditProfile}>
+                Edit profile
+              </EditProfileButton>
             ) : (
               <FollowButton>Follow</FollowButton>
             )}
