@@ -1,3 +1,5 @@
+"use client"
+
 import ChatRoom from "./_component/ChatRoom";
 
 export default function Home() {
