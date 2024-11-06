@@ -32,7 +32,7 @@ export default function AfterLoginLayout({ children, modal }: Props) {
                 <ul>
                   <NavMenu />
                 </ul>
-                <PostButton href="/compose/tweet">
+                <PostButton href="/compose/post">
                   <span>게시하기</span>
                   <PostLogo
                     className="w-[24px] h-[24px]"
