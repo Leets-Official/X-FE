@@ -170,7 +170,7 @@ const FooterButtonLeft = styled.div`
 `;
 
 const UploadButton = styled.button`
-  width: 34;
+  width: 34px;
   height: 34px;
   border: none;
   cursor: pointer;
