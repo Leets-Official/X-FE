@@ -62,7 +62,7 @@ const TabOption = styled.div<TabOptionProps>`
   border: none;
 
   &:hover {
-    background-color: rgba(15, 20, 25, 0.1);
+    background-color: rgba(255, 255, 255, 0.1);
   }
 `;
 
