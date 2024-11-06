@@ -10,9 +10,9 @@ import FollowRecommend from "./_component/FollowRecommend";
 import styled, { ThemeProvider } from "styled-components";
 import { theme } from "@/styles/theme";
 
-type Props = { children: ReactNode; modal: ReactNode };
+type Props = { children: ReactNode; modal: ReactNode; settings: ReactNode };
 
-export default function AfterLoginLayout({ children, modal }: Props) {
+export default function AfterLoginLayout({ children, modal, settings }: Props) {
   return (
     <Container>
       <ThemeProvider theme={theme}>
@@ -59,6 +59,7 @@ export default function AfterLoginLayout({ children, modal }: Props) {
           </RightSectionInner>
         </RightSectionWrapper>
         {modal}
+        {settings && <SettingsOverlay>{settings}</SettingsOverlay>}
       </ThemeProvider>
     </Container>
   );
@@ -68,6 +69,19 @@ const Container = styled.div`
   display: flex;
   align-items: stretch;
   background-color: black;
+`;
+
+const SettingsOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
 `;
 
 const LeftSectionWrapper = styled.header`
