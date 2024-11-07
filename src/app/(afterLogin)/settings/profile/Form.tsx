@@ -4,6 +4,7 @@ import {
   TextareaField,
   DateSelectContainer,
   Select,
+  FormDisplay,
 } from "./styles";
 
 interface FormProps {
@@ -51,7 +52,7 @@ export default function Form({
   );
 
   return (
-    <div>
+    <FormDisplay>
       <InputLabel>Name</InputLabel>
       <InputField
         type="text"
@@ -108,6 +109,6 @@ export default function Form({
           ))}
         </Select>
       </DateSelectContainer>
-    </div>
+    </FormDisplay>
   );
 }

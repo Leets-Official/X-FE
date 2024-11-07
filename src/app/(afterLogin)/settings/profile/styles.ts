@@ -43,7 +43,8 @@ export const Form = styled.div`
 
 export const InputLabel = styled.label`
   font-size: 14px;
-  color: #71767b;
+  color: ${(props) => props.theme.linecolor};
+  margin-bottom: 5px;
 `;
 
 export const InputField = styled.input`
@@ -52,6 +53,7 @@ export const InputField = styled.input`
   border-radius: 4px;
   background-color: #121212;
   color: white;
+  margin-bottom: 5px;
 
   &::placeholder {
     color: #71767b;
@@ -66,9 +68,10 @@ export const TextareaField = styled.textarea`
   color: white;
   resize: none;
   height: 60px;
+  margin-bottom: 5px;
 
   &::placeholder {
-    color: #71767b;
+    color: ${(props) => props.theme.linecolor};
   }
 `;
 
@@ -81,7 +84,7 @@ export const SaveButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: #71767b;
+    background-color: ${(props) => props.theme.linecolor};
   }
 `;
 
@@ -105,4 +108,9 @@ export const Select = styled.select`
     outline: none;
     border-color: #1da1f2;
   }
+`;
+
+export const FormDisplay = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
