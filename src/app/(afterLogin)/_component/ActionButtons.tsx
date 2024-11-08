@@ -68,7 +68,7 @@ const ActionButtonsWrapper = styled.div`
   flex-direction: row;
   column-gap: 4px;
   margin-left: 5px;
-  margin-top: 8%;
+  margin-top: 3%;
 `;
 
 const ButtonWrapper = styled.div<{ buttonType: string }>`
