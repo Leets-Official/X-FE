@@ -1,9 +1,17 @@
-import Link from "next/link";
-import styled from "styled-components";
+import {
+  PostImageSection,
+  SingleImageLink,
+  TwoImageWrapper,
+  ImageLink,
+  ThreeImageWrapper,
+  ThreeImageColumn,
+  FourImageWrapper,
+  FourImageLink,
+} from "./PostStyle";
 
 type Image = {
-  link: string;
   imageId: number;
+  link: string;
 };
 
 type Props = {
@@ -21,74 +29,76 @@ type Props = {
 };
 
 export default function PostImages({ post }: Props) {
-  if (!post.Images || !post.Images.length) return null;
+  if (!post.Images || post.Images.length === 0) return null;
 
-  const renderImages = () => {
-    switch (post.Images.length) {
-      case 1:
-        return (
-          <SingleImage
+  if (post.Images.length === 1) {
+    const image = post.Images[0];
+    return (
+      <PostImageSection>
+        <SingleImageLink
+          href={`/${post.User.id}/status/${post.postId}/photo/${image.imageId}`}
+          style={{ backgroundImage: `url(${image.link})` }}
+        >
+          <img src={image.link} alt={`image-${image.imageId}`} />
+        </SingleImageLink>
+      </PostImageSection>
+    );
+  }
+
+  if (post.Images.length === 2) {
+    return (
+      <PostImageSection>
+        <TwoImageWrapper>
+          {post.Images.map((image) => (
+            <ImageLink
+              key={image.imageId}
+              href={`/${post.User.id}/status/${post.postId}/photo/${image.imageId}`}
+              style={{ backgroundImage: `url(${image.link})` }}
+            />
+          ))}
+        </TwoImageWrapper>
+      </PostImageSection>
+    );
+  }
+
+  if (post.Images.length === 3) {
+    return (
+      <PostImageSection>
+        <ThreeImageWrapper>
+          <ImageLink
+            href={`/${post.User.id}/status/${post.postId}/photo/${post.Images[0].imageId}`}
             style={{ backgroundImage: `url(${post.Images[0]?.link})` }}
-          >
-            <img src={post.Images[0]?.link} alt="" />
-          </SingleImage>
-        );
-      case 2:
-        return (
-          <DoubleImage>
-            {post.Images.map((image) => (
-              <ImageLink
-                key={image.imageId}
-                href={`/${post.User.id}/status/${post.postId}/photo/${image.imageId}`}
-                style={{ backgroundImage: `url(${image.link})` }}
-              />
-            ))}
-          </DoubleImage>
-        );
-      default:
-        return null;
-    }
-  };
+          />
+          <ThreeImageColumn>
+            <ImageLink
+              href={`/${post.User.id}/status/${post.postId}/photo/${post.Images[1].imageId}`}
+              style={{ backgroundImage: `url(${post.Images[1]?.link})` }}
+            />
+            <ImageLink
+              href={`/${post.User.id}/status/${post.postId}/photo/${post.Images[2].imageId}`}
+              style={{ backgroundImage: `url(${post.Images[2]?.link})` }}
+            />
+          </ThreeImageColumn>
+        </ThreeImageWrapper>
+      </PostImageSection>
+    );
+  }
 
-  return <ImageSection>{renderImages()}</ImageSection>;
+  if (post.Images.length === 4) {
+    return (
+      <PostImageSection>
+        <FourImageWrapper>
+          {post.Images.map((image) => (
+            <FourImageLink
+              key={image.imageId}
+              href={`/${post.User.id}/status/${post.postId}/photo/${image.imageId}`}
+              style={{ backgroundImage: `url(${image.link})` }}
+            />
+          ))}
+        </FourImageWrapper>
+      </PostImageSection>
+    );
+  }
+
+  return null;
 }
-
-const ImageSection = styled.div`
-  margin-top: 12px;
-  width: 100%;
-  border-radius: 16px;
-`;
-
-const SingleImage = styled.div`
-  max-height: 510px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 100%;
-  border-radius: 16px;
-
-  img {
-    width: 100%;
-    border-radius: 16px;
-  }
-`;
-
-const DoubleImage = styled.div`
-  display: flex;
-  height: 272px;
-  gap: 2px;
-`;
-
-const ImageLink = styled(Link)`
-  flex: 1;
-  background-size: cover;
-
-  &:first-child {
-    border-top-left-radius: 16px;
-    border-bottom-left-radius: 16px;
-  }
-
-  &:last-child {
-    border-top-right-radius: 16px;
-    border-bottom-right-radius: 16px;
-  }
-`;

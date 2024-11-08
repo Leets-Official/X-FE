@@ -2,20 +2,26 @@
 
 import { useRef, useState } from "react";
 import styled from "styled-components";
+import Gallery from "../../../../../../../public/ic_gallery.svg";
 
 export default function CommentForm() {
   const [content, setContent] = useState("");
+
   const imageRef = useRef<HTMLInputElement>(null);
+
   const onClickButton = () => {};
+
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
   };
+
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
+
   const me = {
     id: "jiwon",
-    image: "/jiwon.jpg",
+    image: "/default_profile_img.svg",
   };
 
   return (
@@ -29,7 +35,7 @@ export default function CommentForm() {
         <StyledTextarea
           value={content}
           onChange={onChange}
-          placeholder="답글 게시하기"
+          placeholder="Post your reply"
         />
         <PostButtonSection>
           <FooterButtons>
@@ -41,16 +47,15 @@ export default function CommentForm() {
                 hidden
                 ref={imageRef}
               />
-              <UploadButton type="button" onClick={onClickButton}>
-                <svg width={24} viewBox="0 0 24 24" aria-hidden="true">
-                  <g>
-                    <path d="M3 5.5C3 4.119 4.119 3 5.5 3h13C19.881 3 21 4.119 21 5.5v13c0 1.381-1.119 2.5-2.5 2.5h-13C4.119 21 3 19.881 3 18.5v-13zM5.5 5c-.276 0-.5.224-.5.5v9.086l3-3 3 3 5-5 3 3V5.5c0-.276-.224-.5-.5-.5h-13zM19 15.414l-3-3-5 5-3-3-3 3V18.5c0 .276.224.5.5.5h13c.276 0 .5-.224.5-.5v-3.086zM9.75 7C8.784 7 8 7.784 8 8.75s.784 1.75 1.75 1.75 1.75-.784 1.75-1.75S10.716 7 9.75 7z"></path>
-                  </g>
-                </svg>
-              </UploadButton>
+              <Gallery
+                className="w-[20px] h-[20px]"
+                type="button"
+                fill="currentColor"
+                onClick={onClickButton}
+              />
             </FooterButtonLeft>
             <ActionButton type="submit" disabled={!content}>
-              답글
+              Reply
             </ActionButton>
           </FooterButtons>
         </PostButtonSection>
@@ -63,6 +68,7 @@ const PostForm = styled.form`
   display: flex;
   padding: 16px 16px 8px;
   border-bottom: 1px solid rgb(239, 243, 244);
+  background-color: #000;
 `;
 
 const PostUserSection = styled.div`
@@ -93,9 +99,12 @@ const StyledTextarea = styled.textarea`
   font-size: 20px;
   line-height: 24px;
   outline: none;
+  background-color: black;
+  resize: none;
 
   &::placeholder {
-    font-family: "Malgun Gothic", sans-serif;
+    text: white;
+    resize: none;
   }
 `;
 
@@ -110,27 +119,6 @@ const FooterButtons = styled.div`
 
 const FooterButtonLeft = styled.div`
   flex: 1;
-`;
-
-const UploadButton = styled.button`
-  width: 34px;
-  height: 34px;
-  border: none;
-  cursor: pointer;
-  border-radius: 17px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(29, 155, 240, 0.01);
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: rgba(29, 155, 240, 0.1);
-  }
-
-  svg {
-    fill: rgb(29, 155, 240);
-  }
 `;
 
 const ActionButton = styled.button`

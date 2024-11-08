@@ -20,7 +20,12 @@ export default function Post() {
     },
     content: "X 클론코딩 하는 중",
     createdAt: new Date(),
-    Images: [{ link: "/default_profile_img.jpg", imageId: 1 }],
+    Images: [
+      { link: "/default_profile_img.svg", imageId: 1 },
+      { link: "/default_profile_img.svg", imageId: 2 },
+      { link: "/default_profile_img.svg", imageId: 3 },
+      { link: "/default_profile_img.svg", imageId: 4 },
+    ],
   };
 
   return (
@@ -42,7 +47,9 @@ export default function Post() {
               <span>@{target.User.id}</span>
               &nbsp;·&nbsp;
             </Link>
-            <PostDate>{dayjs(target.createdAt).fromNow(true)}</PostDate>
+            <PostDate>
+              {dayjs(target.createdAt).format("h:mm A · MMM D, YYYY")}
+            </PostDate>
           </PostMeta>
           <div>{target.content}</div>
           <PostImages post={target} />
@@ -67,7 +74,7 @@ const PostUserImage = styled.div`
   position: relative;
   display: inline-block;
   width: 40px;
-  height: 40px;
+  height: 410.33px;
   border-radius: 20px;
 
   img {
