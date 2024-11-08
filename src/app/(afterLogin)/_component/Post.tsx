@@ -74,7 +74,7 @@ const PostUserImage = styled.div`
   position: relative;
   display: inline-block;
   width: 40px;
-  height: 40px;
+  height: 410.33px;
   border-radius: 20px;
 
   img {
