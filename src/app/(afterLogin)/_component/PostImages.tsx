@@ -1,9 +1,17 @@
-import Link from "next/link";
-import styled from "styled-components";
+import {
+  PostImageSection,
+  SingleImageLink,
+  TwoImageWrapper,
+  ImageLink,
+  ThreeImageWrapper,
+  ThreeImageColumn,
+  FourImageWrapper,
+  FourImageLink,
+} from "./PostStyle";
 
 type Image = {
-  link: string;
   imageId: number;
+  link: string;
 };
 
 type Props = {
@@ -21,186 +29,76 @@ type Props = {
 };
 
 export default function PostImages({ post }: Props) {
-  if (!post.Images || !post.Images.length) return null;
-  console.log(post.Images.length);
+  if (!post.Images || post.Images.length === 0) return null;
 
-  const renderImages = () => {
-    switch (post.Images.length) {
-      case 1:
-        return (
-          <SingleImage>
-            <img
-              src={post.Images[0].link}
-              alt={`image-${post.Images[0].imageId}`}
-            />
-          </SingleImage>
-        );
-      case 2:
-        return (
-          <DoubleImage>
-            {post.Images.map((image) => (
-              <ImageLink
-                key={image.imageId}
-                href={`/${post.User.id}/status/${post.postId}/photo/${image.imageId}`}
-              >
-                <img src={image.link} alt={`image-${image.imageId}`} />
-              </ImageLink>
-            ))}
-          </DoubleImage>
-        );
-      case 3:
-        return (
-          <TripleImage>
+  if (post.Images.length === 1) {
+    const image = post.Images[0];
+    return (
+      <PostImageSection>
+        <SingleImageLink
+          href={`/${post.User.id}/status/${post.postId}/photo/${image.imageId}`}
+          style={{ backgroundImage: `url(${image.link})` }}
+        >
+          <img src={image.link} alt={`image-${image.imageId}`} />
+        </SingleImageLink>
+      </PostImageSection>
+    );
+  }
+
+  if (post.Images.length === 2) {
+    return (
+      <PostImageSection>
+        <TwoImageWrapper>
+          {post.Images.map((image) => (
             <ImageLink
-              href={`/${post.User.id}/status/${post.postId}/photo/${post.Images[0].imageId}`}
-            >
-              <img
-                src={post.Images[0].link}
-                alt={`image-${post.Images[0].imageId}`}
-              />
-            </ImageLink>
-            <ImageGrid>
-              {post.Images.slice(1).map((image) => (
-                <ImageLink
-                  key={image.imageId}
-                  href={`/${post.User.id}/status/${post.postId}/photo/${image.imageId}`}
-                >
-                  <img src={image.link} alt={`image-${image.imageId}`} />
-                </ImageLink>
-              ))}
-            </ImageGrid>
-          </TripleImage>
-        );
-      case 4:
-        return (
-          <QuadrupleImage>
-            {post.Images.map((image) => (
-              <ImageLink
-                key={image.imageId}
-                href={`/${post.User.id}/status/${post.postId}/photo/${image.imageId}`}
-              >
-                <img src={image.link} alt={`image-${image.imageId}`} />
-              </ImageLink>
-            ))}
-          </QuadrupleImage>
-        );
-      default:
-        return null;
-    }
-  };
+              key={image.imageId}
+              href={`/${post.User.id}/status/${post.postId}/photo/${image.imageId}`}
+              style={{ backgroundImage: `url(${image.link})` }}
+            />
+          ))}
+        </TwoImageWrapper>
+      </PostImageSection>
+    );
+  }
 
-  return <ImageSection>{renderImages()}</ImageSection>;
+  if (post.Images.length === 3) {
+    return (
+      <PostImageSection>
+        <ThreeImageWrapper>
+          <ImageLink
+            href={`/${post.User.id}/status/${post.postId}/photo/${post.Images[0].imageId}`}
+            style={{ backgroundImage: `url(${post.Images[0]?.link})` }}
+          />
+          <ThreeImageColumn>
+            <ImageLink
+              href={`/${post.User.id}/status/${post.postId}/photo/${post.Images[1].imageId}`}
+              style={{ backgroundImage: `url(${post.Images[1]?.link})` }}
+            />
+            <ImageLink
+              href={`/${post.User.id}/status/${post.postId}/photo/${post.Images[2].imageId}`}
+              style={{ backgroundImage: `url(${post.Images[2]?.link})` }}
+            />
+          </ThreeImageColumn>
+        </ThreeImageWrapper>
+      </PostImageSection>
+    );
+  }
+
+  if (post.Images.length === 4) {
+    return (
+      <PostImageSection>
+        <FourImageWrapper>
+          {post.Images.map((image) => (
+            <FourImageLink
+              key={image.imageId}
+              href={`/${post.User.id}/status/${post.postId}/photo/${image.imageId}`}
+              style={{ backgroundImage: `url(${image.link})` }}
+            />
+          ))}
+        </FourImageWrapper>
+      </PostImageSection>
+    );
+  }
+
+  return null;
 }
-
-const ImageSection = styled.div`
-  margin-top: 12px;
-  width: 100%;
-  border-radius: 16px;
-`;
-
-const SingleImage = styled.div`
-  max-height: 272px;
-  width: 100%;
-  border-radius: 16px;
-
-  img {
-    width: 100%;
-    height: 100%;
-    border-radius: 16px;
-    object-fit: cover;
-  }
-`;
-
-const DoubleImage = styled.div`
-  display: flex;
-  height: 272px;
-  gap: 2px;
-
-  img {
-    width: 100%;
-    height: 100%;
-    border-radius: 16px;
-    object-fit: cover;
-  }
-`;
-
-const ImageLink = styled(Link)`
-  flex: 1;
-  background-size: cover;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  &:first-child {
-    border-top-left-radius: 16px;
-    border-bottom-left-radius: 16px;
-  }
-
-  &:last-child {
-    border-top-right-radius: 16px;
-    border-bottom-right-radius: 16px;
-  }
-`;
-
-const TripleImage = styled.div`
-  display: flex;
-  gap: 2px;
-  height: 272px;
-
-  > a:first-child {
-    width: 50%;
-    height: 100%;
-    border-radius: 16px 0 0 16px;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-
-  > a:not(:first-child) {
-    flex: 1;
-    height: 50%;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-`;
-
-const QuadrupleImage = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2px;
-  height: 272px;
-
-  img {
-    width: 257.67px;
-    height: 144.5px;
-    border-radius: 16px;
-    object-fit: cover;
-  }
-`;
-
-const ImageGrid = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  width: 50%;
-  height: 100%;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 16px;
-  }
-`;
