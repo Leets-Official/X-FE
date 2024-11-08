@@ -22,6 +22,7 @@ type Props = {
 
 export default function PostImages({ post }: Props) {
   if (!post.Images || !post.Images.length) return null;
+  console.log(post.Images.length);
 
   const renderImages = () => {
     switch (post.Images.length) {
@@ -98,13 +99,15 @@ const ImageSection = styled.div`
 `;
 
 const SingleImage = styled.div`
-  max-height: 510px;
+  max-height: 272px;
   width: 100%;
   border-radius: 16px;
 
   img {
     width: 100%;
+    height: 100%;
     border-radius: 16px;
+    object-fit: cover;
   }
 `;
 
@@ -116,8 +119,8 @@ const DoubleImage = styled.div`
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
     border-radius: 16px;
+    object-fit: cover;
   }
 `;
 
@@ -145,11 +148,31 @@ const ImageLink = styled(Link)`
 const TripleImage = styled.div`
   display: flex;
   gap: 2px;
+  height: 272px;
 
-  > div:first-child {
+  > a:first-child {
     width: 50%;
-    background-size: cover;
+    height: 100%;
     border-radius: 16px 0 0 16px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  > a:not(:first-child) {
+    flex: 1;
+    height: 50%;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 `;
 
@@ -160,10 +183,10 @@ const QuadrupleImage = styled.div`
   height: 272px;
 
   img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 257.67px;
+    height: 144.5px;
     border-radius: 16px;
+    object-fit: cover;
   }
 `;
 
