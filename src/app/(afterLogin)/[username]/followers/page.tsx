@@ -113,6 +113,12 @@ const Container = styled.div`
   background-color: #000;
   color: #fff;
   min-height: 100vh;
+  width: 600px;
+  border-color: #71767b;
+  border-right-width: 1px;
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-right-style: solid;
 `;
 
 const Header = styled.div`
@@ -198,6 +204,6 @@ const FollowButton = styled.button`
 
 const NoFollowers = styled.div`
   text-align: center;
-  color: #999;
+  color: white;
   padding: 16px 0;
 `;
