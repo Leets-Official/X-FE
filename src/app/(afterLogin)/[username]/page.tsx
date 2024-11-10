@@ -59,7 +59,7 @@ export default function Profile() {
       setUserProfile(data);
     } catch (error) {
       console.log("유저 기본 프로필 조회에 오류가 생겼습니다.", error);
-      setError("실패햇음");
+      setError("유저 기본 프로필 조회에 오류가 발생하였습니다.");
     }
 
     if (error) return <div>{error}</div>;
