@@ -73,16 +73,6 @@ export default function Profile() {
     //message: "welcome to my profile!",
   };
 
-  // const followingList = [
-  //   { id: "JzunyY123", name: "문석준", profileImage: "/jiwon.jpg" },
-  //   { id: "NetflixKR", name: "Netflix Korea", profileImage: "/jiwon.jpg" },
-  // ];
-
-  // const followerList = [
-  //   { id: "JzunyY123", name: "문석준", profileImage: "/jiwon.jpg" },
-  //   { id: "NetflixKR", name: "Netflix Korea", profileImage: "/jiwon.jpg" },
-  // ];
-
   const router = useRouter();
 
   useEffect(() => {
