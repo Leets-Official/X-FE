@@ -2,42 +2,84 @@
 import styled from "styled-components";
 import BackButton from "@/(afterLogin)/_component/BackButton";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 interface TabItemProps {
   active: boolean;
 }
 
+type Followers = {
+  id: number;
+  name: string;
+  customId: string;
+  introduce: string;
+  image: string;
+};
+
 export default function Followers() {
-  const user = {
-    id: "@jiwon",
-    nickname: "지원",
-    image: "/default_profile_img.svg",
+  const [follower, setFollower] = useState<Followers[]>([]);
+  const [accessToken, setAccessToken] = useState("");
+  const [userId, setUserId] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    console.log(userId);
+    if (userId) {
+      setUserId(userId);
+    }
+  }, []);
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accesstoken");
+    if (accessToken) {
+      setAccessToken(accessToken);
+    }
+  }, []);
+
+  const fetchFolloweres = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/follows/follower/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      console.log(response.data);
+
+      const data = response.data.data;
+      if (Array.isArray(data)) {
+        setFollower(data);
+      } else {
+        setFollower([]);
+      }
+    } catch (error) {
+      console.log("팔로워 목록 조회 오류 발생", error);
+      setError("팔로워 목록을 불러올 수 없습니다.");
+      setFollower([]);
+    }
+
+    if (error) return <div>{error}</div>;
   };
 
-  const followingList = [
-    {
-      id: "JzunyY123",
-      name: "문석준/기계·스마트·산업공학부(산업공학전공)",
-      profileImage: "/default_profile_img.svg",
-    },
-    {
-      id: "NetflixKR",
-      name: "Netflix Korea | 넷플릭스 코리아",
-      profileImage: "/default_profile_img.svg",
-    },
-  ];
+  useEffect(() => {
+    fetchFolloweres();
+  }, [userId]);
 
   const router = useRouter();
 
   const onClickFollowing = () => {
-    router.push(`/${user.id}/following`);
+    router.push(`/${userId}/following`);
   };
 
   return (
     <Container>
       <Header>
         <BackButton />
-        <Title>{user.id}</Title>
+        <Title>{/* 이후 api  연결 후 수정할 예정*/}</Title>
       </Header>
       <TabMenu>
         <TabItem active={true}>Followers</TabItem>
@@ -47,16 +89,20 @@ export default function Followers() {
       </TabMenu>
       <Divider />
       <FollowingList>
-        {followingList.map((user) => (
-          <FollowingItem key={user.id}>
-            <ProfileImage src={user.profileImage} alt={user.name} />
-            <UserInfo>
-              <UserName>{user.name}</UserName>
-              <UserHandle>@{user.id}</UserHandle>
-            </UserInfo>
-            <FollowButton>Following</FollowButton>
-          </FollowingItem>
-        ))}
+        {follower && follower.length > 0 ? (
+          follower.map((user) => (
+            <FollowingItem key={user.customId}>
+              <ProfileImage src={user.image} alt={user.name} />
+              <UserInfo>
+                <UserName>{user.name}</UserName>
+                <UserHandle>{user.customId}</UserHandle>
+              </UserInfo>
+              <FollowButton>Following</FollowButton>
+            </FollowingItem>
+          ))
+        ) : (
+          <NoFollowers>팔로워가 없습니다.</NoFollowers>
+        )}
       </FollowingList>
     </Container>
   );
@@ -148,4 +194,10 @@ const FollowButton = styled.button`
   &:hover {
     background-color: #333;
   }
+`;
+
+const NoFollowers = styled.div`
+  text-align: center;
+  color: #999;
+  padding: 16px 0;
 `;
