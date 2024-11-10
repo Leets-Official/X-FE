@@ -8,45 +8,97 @@ import TabProvider from "./_component/TabProvider";
 import Post from "../_component/Post";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import axios from "axios";
+
+type UserProfile = {
+  userId: number;
+  isMyProfile: boolean;
+  name: string;
+  customId: string;
+  followerCount: number | null;
+  followingCount: number | null;
+  isFollowing: boolean;
+  createdAt: string;
+  introduce: string;
+};
 
 export default function Profile() {
-  const user = {
-    id: "jiwon",
-    nickname: "지원",
-    image: "/default_profile_img.svg",
-    backgroundImage: "/backgroundImage.jpg",
-    message: "welcome to my profile!",
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [userId, setUserId] = useState("");
+  const [accessToken, setAccessToken] = useState("");
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    console.log(userId);
+    if (userId) {
+      setUserId(userId);
+    }
+  }, []);
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accesstoken");
+    if (accessToken) {
+      setAccessToken(accessToken);
+    }
+  }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      console.log(response);
+
+      const { data } = response.data;
+      setUserProfile(data);
+    } catch (error) {
+      console.log("유저 기본 프로필 조회에 오류가 생겼습니다.", error);
+      setError("실패햇음");
+    }
+
+    if (error) return <div>{error}</div>;
   };
 
-  const followingList = [
-    { id: "JzunyY123", name: "문석준", profileImage: "/jiwon.jpg" },
-    { id: "NetflixKR", name: "Netflix Korea", profileImage: "/jiwon.jpg" },
-  ];
+  const user = {
+    //id: "jiwon",
+    //nickname: "지원",
+    image: "/default_profile_img.svg",
+    backgroundImage: "/backgroundImage.jpg",
+    //message: "welcome to my profile!",
+  };
 
-  const followerList = [
-    { id: "JzunyY123", name: "문석준", profileImage: "/jiwon.jpg" },
-    { id: "NetflixKR", name: "Netflix Korea", profileImage: "/jiwon.jpg" },
-  ];
+  // const followingList = [
+  //   { id: "JzunyY123", name: "문석준", profileImage: "/jiwon.jpg" },
+  //   { id: "NetflixKR", name: "Netflix Korea", profileImage: "/jiwon.jpg" },
+  // ];
 
-  const [currentUserId, setCurrentUserId] = useState(user.id);
-  const [isOwnProfile, setIsOwnProfile] = useState(false);
+  // const followerList = [
+  //   { id: "JzunyY123", name: "문석준", profileImage: "/jiwon.jpg" },
+  //   { id: "NetflixKR", name: "Netflix Korea", profileImage: "/jiwon.jpg" },
+  // ];
 
   const router = useRouter();
 
   useEffect(() => {
-    setCurrentUserId(user.id);
-  }, [user.id]);
+    fetchUserProfile();
+  }, [userId]);
 
-  useEffect(() => {
-    setIsOwnProfile(user.id === currentUserId);
-  }, [user.id, currentUserId]);
+  const onClickFollow = () => {
+    console.log("Follow button clicked");
+  };
 
   const onClickFollowing = () => {
-    router.push(`/${user.id}/following`);
+    router.push(`/${userId}/following`);
   };
 
   const onClickFollowers = () => {
-    router.push(`/${user.id}/followers`);
+    router.push(`/${userId}/followers`);
   };
 
   const onEditProfile = () => {
@@ -58,33 +110,35 @@ export default function Profile() {
       <Main>
         <Header>
           <BackButton />
-          <HeaderTitle>{user.nickname}</HeaderTitle>
+          <HeaderTitle>{userProfile?.name}</HeaderTitle>
         </Header>
         <BackgroundImage src={user.backgroundImage} alt="Background Image" />
         <UserZone>
           <ProfileHeader>
             <UserImage>
-              <img src={user.image} alt={user.id} />
+              <img src={user.image} alt={user.image} />
             </UserImage>
-            {isOwnProfile ? (
+            {userProfile?.isMyProfile ? (
               <EditProfileButton onClick={onEditProfile}>
                 Edit profile
               </EditProfileButton>
             ) : (
-              <FollowButton>Follow</FollowButton>
+              <FollowButton onClick={onClickFollow}>
+                {userProfile?.isFollowing ? "Unfollow" : "Follow"}
+              </FollowButton>
             )}
           </ProfileHeader>
           <UserName>
-            <Nickname>{user.nickname}</Nickname>
-            <UserId>@{user.id}</UserId>
+            <Nickname>{userProfile?.name}</Nickname>
+            <UserId>{userProfile?.customId}</UserId>
           </UserName>
-          <Message>{user.message}</Message>
+          <Message>{userProfile?.introduce}</Message>
           <UserStats>
             <StatButton onClick={onClickFollowing}>
-              <BoldText>{followingList.length}</BoldText> Following
+              <BoldText>{userProfile?.followingCount || 0}</BoldText> Following
             </StatButton>
             <StatButton onClick={onClickFollowers}>
-              <BoldText>{followerList.length}</BoldText> Followers
+              <BoldText>{userProfile?.followerCount || 0}</BoldText> Followers
             </StatButton>
           </UserStats>
         </UserZone>
