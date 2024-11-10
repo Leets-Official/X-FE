@@ -2,42 +2,84 @@
 import styled from "styled-components";
 import BackButton from "@/(afterLogin)/_component/BackButton";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 interface TabItemProps {
   active: boolean;
 }
 
+type Following = {
+  id: number;
+  name: string;
+  customId: string;
+  introduce: string;
+  image: string;
+};
+
 export default function Following() {
-  const user = {
-    id: "@jiwon",
-    nickname: "지원",
-    image: "/default_profile_img.svg",
+  const [following, setFollowing] = useState<Following[]>([]);
+  const [accessToken, setAccessToken] = useState("");
+  const [userId, setUserId] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    console.log(userId);
+    if (userId) {
+      setUserId(userId);
+    }
+  }, []);
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accesstoken");
+    if (accessToken) {
+      setAccessToken(accessToken);
+    }
+  }, []);
+
+  const fetchFollowing = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/follows/following/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      console.log(response.data);
+
+      const data = response.data.data;
+      if (Array.isArray(data)) {
+        setFollowing(data);
+      } else {
+        setFollowing([]);
+      }
+    } catch (error) {
+      console.log("팔로워 목록 조회 오류 발생", error);
+      setError("팔로워 목록을 불러올 수 없습니다.");
+      setFollowing([]);
+    }
+
+    if (error) return <div>{error}</div>;
   };
 
-  const followingList = [
-    {
-      id: "JzunyY123",
-      name: "문석준/기계·스마트·산업공학부(산업공학전공)",
-      profileImage: "/default_profile_img.svg",
-    },
-    {
-      id: "NetflixKR",
-      name: "Netflix Korea | 넷플릭스 코리아",
-      profileImage: "/default_profile_img.svg",
-    },
-  ];
+  useEffect(() => {
+    fetchFollowing();
+  }, [userId]);
 
   const router = useRouter();
 
   const onClickFollowers = () => {
-    router.push(`/${user.id}/followers`);
+    router.push(`/${userId}/followers`);
   };
 
   return (
     <Container>
       <Header>
         <BackButton />
-        <Title>{user.id}</Title>
+        <Title>{userId}</Title>
       </Header>
       <TabMenu>
         <TabItem onClick={onClickFollowers} active={false}>
@@ -47,16 +89,20 @@ export default function Following() {
       </TabMenu>
       <Divider />
       <FollowingList>
-        {followingList.map((user) => (
-          <FollowingItem key={user.id}>
-            <ProfileImage src={user.profileImage} alt={user.name} />
-            <UserInfo>
-              <UserName>{user.name}</UserName>
-              <UserHandle>@{user.id}</UserHandle>
-            </UserInfo>
-            <FollowButton>Following</FollowButton>
-          </FollowingItem>
-        ))}
+        {following && following.length > 0 ? (
+          following.map((user) => (
+            <FollowingItem key={user.customId}>
+              <ProfileImage src={user.image} alt={user.name} />
+              <UserInfo>
+                <UserName>{user.name}</UserName>
+                <UserHandle>{user.customId}</UserHandle>
+              </UserInfo>
+              <FollowButton>Following</FollowButton>
+            </FollowingItem>
+          ))
+        ) : (
+          <NoFollowing>팔로잉 하는 사람이 없습니다.</NoFollowing>
+        )}
       </FollowingList>
     </Container>
   );
@@ -67,6 +113,12 @@ const Container = styled.div`
   background-color: #000;
   color: #fff;
   min-height: 100vh;
+  width: 600px;
+  border-color: #71767b;
+  border-right-width: 1px;
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-right-style: solid;
 `;
 
 const Header = styled.div`
@@ -148,4 +200,10 @@ const FollowButton = styled.button`
   &:hover {
     background-color: #333;
   }
+`;
+
+const NoFollowing = styled.div`
+  text-align: center;
+  color: white;
+  padding: 16px 0;
 `;
