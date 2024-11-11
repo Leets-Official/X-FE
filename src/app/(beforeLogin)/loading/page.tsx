@@ -48,8 +48,12 @@ export default function Loading() {
       );
       console.log("res: ", res);
 
-      const accessToken = res.data.data.jwtToken.accessToken;
+      //const accessToken = res.data.data.jwtToken.accessToken;
+      const accessToken = `${process.env.NEXT_PUBLIC_API_MASTER_TOKEN}`;
       localStorage.setItem("accesstoken", accessToken);
+
+      const userId = res.data.data.id;
+      localStorage.setItem("userId", userId);
 
       const responseCode = res.data.code;
       // const responseCode = 201;
