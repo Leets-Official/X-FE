@@ -28,7 +28,7 @@ import Post from "../_component/Post";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { followUser } from "./api/follow";
+import { followUser, unfollowUser } from "./api/follow";
 
 type UserProfile = {
   userId: number;
@@ -113,13 +113,17 @@ export default function Profile() {
   const onClickFollow = async () => {
     if (!userProfile || !userProfile.userId) return;
 
-    const result = await followUser(userProfile.userId.toString(), accessToken);
+    const result = userProfile.isFollowing
+      ? await unfollowUser(userProfile.userId.toString(), accessToken)
+      : await followUser(userProfile.userId.toString(), accessToken);
 
     if (result.success) {
       setUserProfile((prevProfile) => ({
         ...prevProfile,
-        isFollowing: true,
-        followerCount: (prevProfile.followerCount ?? 0) + 1,
+        isFollowing: !prevProfile.isFollowing,
+        followerCount: prevProfile.isFollowing
+          ? (prevProfile.followerCount ?? 0) - 1
+          : (prevProfile.followerCount ?? 0) + 1,
       }));
       alert(result.message);
     } else {
@@ -127,11 +131,7 @@ export default function Profile() {
       if (errorCode === 404) {
         alert("존재하지 않는 유저입니다.");
       } else if (errorCode === 400) {
-        if (errorMessage === "자기 자신은 팔로우 할 수 없습니다.") {
-          alert("자기 자신은 팔로우 할 수 없습니다.");
-        } else if (errorMessage === "이미 팔로우한 상태입니다.") {
-          alert("이미 팔로우한 상태입니다.");
-        }
+        alert(errorMessage || "요청에 오류가 발생했습니다.");
       } else {
         alert(errorMessage || "알 수 없는 오류가 발생했습니다.");
       }
