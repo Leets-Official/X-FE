@@ -111,7 +111,10 @@ export default function Profile() {
   }, [userId]);
 
   const onClickFollow = async () => {
-    if (!userProfile || !userProfile.userId) return;
+    if (!userProfile || !userProfile.userId) {
+      console.log("userProfile 또는 userProfile.userId가 없습니다.");
+      return;
+    }
 
     const result = userProfile.isFollowing
       ? await unfollowUser(userProfile.userId.toString(), accessToken)
