@@ -23,7 +23,18 @@ type UserProfile = {
 };
 
 export default function Profile() {
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile>({
+    userId: 0,
+    isMyProfile: false,
+    name: "",
+    customId: "",
+    followerCount: 0,
+    followingCount: 0,
+    isFollowing: false,
+    createdAt: "",
+    introduce: "",
+  });
+
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState("");
   const [accessToken, setAccessToken] = useState("");
@@ -125,10 +136,10 @@ export default function Profile() {
           <Message>{userProfile?.introduce}</Message>
           <UserStats>
             <StatButton onClick={onClickFollowing}>
-              <BoldText>{userProfile?.followingCount || 0}</BoldText> Following
+              <BoldText>{userProfile?.followingCount}</BoldText> Following
             </StatButton>
             <StatButton onClick={onClickFollowers}>
-              <BoldText>{userProfile?.followerCount || 0}</BoldText> Followers
+              <BoldText>{userProfile?.followerCount}</BoldText> Followers
             </StatButton>
           </UserStats>
         </UserZone>
