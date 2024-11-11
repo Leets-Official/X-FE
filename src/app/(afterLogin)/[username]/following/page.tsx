@@ -25,14 +25,14 @@ export default function Following() {
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
+    const accessToken = localStorage.getItem("accesstoken");
+
     console.log(userId);
+    console.log(accessToken);
+
     if (userId) {
       setUserId(userId);
     }
-  }, []);
-
-  useEffect(() => {
-    const accessToken = localStorage.getItem("accesstoken");
     if (accessToken) {
       setAccessToken(accessToken);
     }
