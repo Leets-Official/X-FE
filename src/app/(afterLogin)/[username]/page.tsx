@@ -1,7 +1,26 @@
 //username의 page
 "use client";
 
-import styled from "styled-components";
+import {
+  Main,
+  BackgroundImage,
+  Header,
+  HeaderTitle,
+  UserZone,
+  ProfileHeader,
+  UserImage,
+  UserName,
+  Nickname,
+  UserId,
+  Message,
+  FollowButton,
+  PostList,
+  UserStats,
+  EditProfileButton,
+  StatButton,
+  BoldText,
+  Divider,
+} from "./styles";
 import BackButton from "../_component/BackButton";
 import Tab from "./_component/Tab";
 import TabProvider from "./_component/TabProvider";
@@ -9,6 +28,7 @@ import Post from "../_component/Post";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { followUser, unfollowUser } from "./api/follow";
 
 type UserProfile = {
   userId: number;
@@ -90,8 +110,35 @@ export default function Profile() {
     fetchUserProfile();
   }, [userId]);
 
-  const onClickFollow = () => {
-    console.log("Follow button clicked");
+  const onClickFollow = async () => {
+    if (!userProfile || !userProfile.userId) {
+      console.log("userProfile 또는 userProfile.userId가 없습니다.");
+      return;
+    }
+
+    const result = userProfile.isFollowing
+      ? await unfollowUser(userProfile.userId.toString(), accessToken)
+      : await followUser(userProfile.userId.toString(), accessToken);
+
+    if (result.success) {
+      setUserProfile((prevProfile) => ({
+        ...prevProfile,
+        isFollowing: !prevProfile.isFollowing,
+        followerCount: prevProfile.isFollowing
+          ? (prevProfile.followerCount ?? 0) - 1
+          : (prevProfile.followerCount ?? 0) + 1,
+      }));
+      alert(result.message);
+    } else {
+      const { errorCode, errorMessage } = result;
+      if (errorCode === 404) {
+        alert("존재하지 않는 유저입니다.");
+      } else if (errorCode === 400) {
+        alert(errorMessage || "요청에 오류가 발생했습니다.");
+      } else {
+        alert(errorMessage || "알 수 없는 오류가 발생했습니다.");
+      }
+    }
   };
 
   const onClickFollowing = () => {
@@ -152,176 +199,3 @@ export default function Profile() {
     </TabProvider>
   );
 }
-
-const Main = styled.main`
-  width: 600px;
-  border-color: #71767b;
-  border-right-width: 1px;
-  border-left-width: 1px;
-  border-left-style: solid;
-  border-right-style: solid;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-`;
-
-const BackgroundImage = styled.img`
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  position: relative;
-  z-index: 1;
-`;
-
-const Header = styled.div`
-  display: flex;
-  height: 53px;
-  align-items: center;
-`;
-
-const HeaderTitle = styled.h3`
-  font-size: 20px;
-  font-weight: bold;
-  margin-left: 30px;
-`;
-
-const UserZone = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-  position: relative;
-  z-index: 2;
-  background-color: #000;
-`;
-
-const ProfileHeader = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
-`;
-
-const UserImage = styled.div`
-  display: flex;
-  margin-right: 12px;
-  width: 134px;
-  height: 134px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin-bottom: 12px;
-  margin-top: -90px;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-`;
-
-const UserName = styled.div`
-  margin: 0 12px;
-  flex-direction: column;
-  margin-bottom: 10px;
-
-  > div:first-child {
-    font-weight: bold;
-    font-size: 20px;
-  }
-
-  > div:last-child {
-    font-size: 15px;
-    color: #71767b;
-  }
-`;
-
-const Nickname = styled.div`
-  font-weight: bold;
-  font-size: 20px;
-`;
-
-const UserId = styled.div`
-  font-size: 15px;
-  color: #71767b;
-`;
-
-const Message = styled.div`
-  margin: 0 12px;
-  margin-top: 8px;
-  font-size: 14px;
-  color: white;
-`;
-
-const FollowButton = styled.button`
-  border: 1px solid rgb(207, 217, 222);
-  padding: 0 16px;
-  border-radius: 17px;
-  height: 34px;
-  background-color: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  color: white;
-  cursor: pointer;
-  margin-left: 50%;
-
-  &:hover {
-    background-color: rgb(39, 44, 48);
-  }
-`;
-
-const PostList = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const UserStats = styled.div`
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin: 12px;
-`;
-
-const EditProfileButton = styled.button`
-  border: 1px solid rgb(207, 217, 222);
-  padding: 0 16px;
-  border-radius: 17px;
-  height: 34px;
-  background-color: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  color: white;
-  cursor: pointer;
-  margin-left: 50%;
-
-  &:hover {
-    background-color: rgb(39, 44, 48);
-  }
-`;
-
-const StatButton = styled.button`
-  color: #71767b;
-  cursor: pointer;
-  font-size: 15px;
-
-  &:hover {
-    text-decoration: none;
-  }
-`;
-
-const BoldText = styled.span`
-  font-weight: bold;
-  color: white;
-`;
-
-const Divider = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: #71767b;
-  margin-top: 8px;
-  margin-bottom: 8px;
-`;

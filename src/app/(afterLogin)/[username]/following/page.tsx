@@ -96,6 +96,7 @@ export default function Following() {
               <UserInfo>
                 <UserName>{user.name}</UserName>
                 <UserHandle>{user.customId}</UserHandle>
+                <UserIntroduce>{user.introduce}</UserIntroduce>
               </UserInfo>
               <FollowButton>Following</FollowButton>
             </FollowingItem>
@@ -186,6 +187,10 @@ const UserName = styled.div`
 
 const UserHandle = styled.div`
   color: #999;
+  font-size: 14px;
+`;
+
+const UserIntroduce = styled.div`
   font-size: 14px;
 `;
 
