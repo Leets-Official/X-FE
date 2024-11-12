@@ -37,7 +37,10 @@ export default function SingleSignOn() {
     console.log(accessToken);
 
     const birth = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-    const formattedCustomId = `@${customId}`;
+    const formattedCustomId = `${customId}`;
+
+    localStorage.setItem("customId", formattedCustomId);
+    console.log(formattedCustomId);
 
     {
       try {
