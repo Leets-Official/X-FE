@@ -1,12 +1,17 @@
 "use client";
-import { useState } from "react";
 
-export default function Tab() {
-  const [tab, setTab] = useState("rec");
+import { Dispatch, SetStateAction } from "react";
 
+interface TabProps {
+  tab: 'rec' | 'fol'; 
+  setTab: Dispatch<SetStateAction<'rec' | 'fol'>>;
+}
+
+export default function Tab({ tab, setTab }: TabProps) {
   const onClickRec = () => {
     setTab("rec");
   };
+  
   const onClickFol = () => {
     setTab("fol");
   };

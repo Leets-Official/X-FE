@@ -29,7 +29,7 @@ type Props = {
 };
 
 export default function PostImages({ post }: Props) {
-  if (!post.Images || post.Images.length === 0) return null;
+  if (!post?.Images || post?.Images.length === 0) return null;
 
   if (post.Images.length === 1) {
     const image = post.Images[0];

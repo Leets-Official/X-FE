@@ -4,31 +4,18 @@ import { ReactNode } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/navigation";
 
-type Image = {
-  link: string;
-  imageId: number;
-};
 
 type Props = {
   children: ReactNode;
-  post: {
-    postId: number;
-    content: string;
-    User: {
-      id: string;
-      nickname: string;
-      image: string;
-    };
-    createdAt: Date;
-    Images: Image[];
-  };
+  postId: number;
+  postUserId: string;
 };
 
-export default function PostArticle({ children, post }: Props) {
+export default function PostArticle({ children, postUserId, postId }: Props) {
   const router = useRouter();
 
   const onClick = () => {
-    router.push(`/${post.User.id}/status/${post.postId}`);
+    router.push(`/${postUserId}/status/${postId}`)
   };
 
   return <PostContainer onClickCapture={onClick}>{children}</PostContainer>;
