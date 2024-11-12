@@ -97,7 +97,13 @@ export default function Followers() {
       <FollowingList>
         {follower && follower.length > 0 ? (
           follower.map((user) => (
-            <FollowingItem key={user.customId}>
+            <FollowingItem
+              key={user.id}
+              onClick={() => {
+                sessionStorage.setItem("userId", user.id.toString());
+                router.push(`/${user.customId}`);
+              }}
+            >
               <ProfileImage src={user.image} alt={user.name} />
               <UserInfo>
                 <UserName>{user.name}</UserName>

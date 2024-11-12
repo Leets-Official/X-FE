@@ -55,8 +55,8 @@ export default function Loading() {
       const userId = res.data.data.id;
       localStorage.setItem("userId", userId);
 
-      // const responseCode = res.data.code;
-      const responseCode = 201;
+      const responseCode = res.data.code;
+      //const responseCode = 201;
       console.log("responseCode: ", responseCode);
 
       redirectTo(responseCode);
