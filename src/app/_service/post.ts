@@ -86,7 +86,7 @@ export const createPost = async (content: string, file: File) => {
     const accessToken = localStorage.getItem("accesstoken");
 
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/posts/post`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/posts/post`,
       formData,
       {
         headers: {

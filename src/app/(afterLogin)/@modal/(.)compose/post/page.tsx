@@ -4,10 +4,12 @@ import { useRef, useState, useEffect } from "react";
 import Gallery from '../../../../../../public/ic_gallery.svg';
 import Close from '../../../../../../public/ic_close.svg';
 import { useRouter } from "next/navigation";
+import { createPost } from "@/_service/post";
 
 export default function TweetModal() {
   const [content, setContent] = useState("");
   const [imagePreview, setImagePreview] = useState<string | null>(null); 
+  const [imageFile, setImageFile] = useState<File | null>(null); 
   const imageRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -19,7 +21,22 @@ export default function TweetModal() {
     };
   }, []);
 
-  const onSubmit = () => {};
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (content && imageFile) {
+      try {
+        await createPost(content, imageFile);
+        // post 생성 성공시 home으로 이동
+        router.push("/home");
+      } catch (error) {
+        console.error("게시물 생성 중 오류 발생:", error);
+      }
+    } else {
+      console.log("게시물 내용 또는 이미지가 없습니다.");
+    }
+  };
+
   const onChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
@@ -39,6 +56,7 @@ export default function TweetModal() {
       reader.onloadend = () => {
         if (reader.result) {
           setImagePreview(reader.result as string);
+          setImageFile(file);
         }
       };
       reader.readAsDataURL(file); 
@@ -48,6 +66,7 @@ export default function TweetModal() {
   // 이미지 미리보기 삭제
   const removeImage = () => {
     setImagePreview(null);
+    setImageFile(null);
   };
 
   const me = {
@@ -74,10 +93,10 @@ export default function TweetModal() {
               />
             </InputDiv>
           </ModalBody>
-          {imagePreview && (  // 이미지 미리보기 표시
+          {imagePreview && ( 
             <ImagePreviewWrapper>
               <img src={imagePreview} alt="Preview" />
-              <RemoveImageButton onClick={removeImage}>X</RemoveImageButton>  {/* 이미지 삭제 버튼 */}
+              <RemoveImageButton onClick={removeImage}>X</RemoveImageButton> 
             </ImagePreviewWrapper>
           )}
           <ModalFooter>

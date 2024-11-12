@@ -47,6 +47,15 @@ export default function Home() {
     getPosts();
   }, []);
 
+  const refreshPosts = async () => {
+    try {
+      const data = await getAllPosts(); 
+      setPosts(data);
+    } catch (error) {
+      console.error('Error refreshing posts:', error);
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>; 
   }
@@ -55,14 +64,13 @@ export default function Home() {
     <StyledMain>
       <TabProvider>
         <Tab />
-        <PostForm />
+        <PostForm refreshPosts={refreshPosts} />
         {posts.length > 0 ? (
           posts.map((post, index) => (
             <Post key={index} post={post} />
           ))
         ) : (
-          // 게시물 없음
-          <div> </div>
+          <div>No posts available</div>
         )}
       </TabProvider>
     </StyledMain>
