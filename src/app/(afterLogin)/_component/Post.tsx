@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
@@ -11,42 +10,12 @@ import ActionButtons from "./ActionButtons";
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
-// export default function Post({ post }: { post: any }) {
-//   const profileImageUrl = post?.user?.profileImage?.link || "/default_profile_img.svg"; // Fallback 이미지 사용
-
-//   return (
-//     <PostArticle post={post}>
-//       <PostWrapper>
-//         <PostUserSection>
-//           <Link href={`/${post?.user?.customId}`} passHref>
-//             <PostUserImage>
-//               <img src={profileImageUrl} alt={post?.user?.name || 'User'} />
-//               <PostShade />
-//             </PostUserImage>
-//           </Link>
-//         </PostUserSection>
-//         <PostBody>
-//           <PostMeta>
-//             <Link href={`/${post?.user?.customId}`} passHref>
-//               <span>{post?.user?.name}</span>
-//               &nbsp;
-//               <span>{post?.user?.customId}</span>
-//               &nbsp;·&nbsp;
-//             </Link>
-//             <PostDate>{post?.createdAt}</PostDate>
-//           </PostMeta>
-//           <div>{post?.content}</div>
-//           <PostImages post={post} />
-//           <ActionButtons />
-//         </PostBody>
-//       </PostWrapper>
-//     </PostArticle>
-//   );
-// }
 export default function Post({ post }: { post: any }) {
 
-  console.log(post);
-  const profileImageUrl = post?.user?.profileImage?.link || "/default_profile_img.svg"; // Fallback 이미지 사용
+ // console.log(post);
+
+  // 이미지 유효하지 않은 경우 디폴트 이미지 적용
+  const profileImageUrl = post?.user?.profileImage?.link || "/default_profile_img.svg";
 
   return (
     <PostArticle postUserId={post?.user?.customId} postId={post?.id}>

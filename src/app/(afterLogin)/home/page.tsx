@@ -29,18 +29,18 @@ const StyledMain = styled.main`
 `;
 
 export default function Home() {
-  const [posts, setPosts] = useState<any[]>([]); // 게시물 상태
-  const [loading, setLoading] = useState<boolean>(true); // 로딩 상태
+  const [posts, setPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); 
 
   useEffect(() => {
     const getPosts = async () => {
       try {
-        const data = await getAllPosts(); // fetchPosts 함수 실행
-        setPosts(data); // 데이터를 상태에 저장
+        const data = await getAllPosts(); 
+        setPosts(data);
       } catch (error) {
         console.error('Error fetching posts:', error);
       } finally {
-        setLoading(false); // 로딩 완료
+        setLoading(false);
       }
     };
 
@@ -48,7 +48,7 @@ export default function Home() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // 로딩 중 표시
+    return <div>Loading...</div>; 
   }
 
   return (

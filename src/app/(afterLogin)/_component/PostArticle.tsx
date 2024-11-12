@@ -15,7 +15,6 @@ export default function PostArticle({ children, postUserId, postId }: Props) {
   const router = useRouter();
 
   const onClick = () => {
-    // router.push(`/${post?.User?.customId}/status/${post?.postId}`);
     router.push(`/${postUserId}/status/${postId}`)
   };
 
