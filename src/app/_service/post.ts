@@ -16,7 +16,7 @@ export const getAllPosts = async () => {
       },
     });
 
-    //console.log('게시물 전체 조회',response.data.data);
+    console.log('게시물 전체 조회',response.data.data);
 
     return response.data.data; 
   } catch (error) {
@@ -40,7 +40,7 @@ export const getFollowingPosts = async () => {
       },
     });
 
-    //console.log('팔로잉 전체 조회',response.data.data);
+    console.log('팔로잉 전체 조회',response.data.data);
 
     return response.data.data; 
   } catch (error) {

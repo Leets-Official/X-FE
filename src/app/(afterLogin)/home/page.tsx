@@ -1,11 +1,10 @@
-"use client"
+"use client";
 
 import styled from "styled-components";
 import PostForm from "./_component/PostForm";
 import Tab from "./_component/Tab";
-import TabProvider from "./_component/TabProvider";
 import Post from "../_component/Post";
-import { getAllPosts } from "@/_service/post";
+import { getAllPosts, getFollowingPosts } from "@/_service/post";
 import { useEffect, useState } from "react";
 
 const StyledMain = styled.main`
@@ -31,11 +30,18 @@ const StyledMain = styled.main`
 export default function Home() {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true); 
+  const [tab, setTab] = useState<'rec' | 'fol'>('rec');
 
   useEffect(() => {
     const getPosts = async () => {
+      let data;
       try {
-        const data = await getAllPosts(); 
+        if(tab === 'rec'){
+          data = await getAllPosts(); 
+        }
+        else{
+          data = await getFollowingPosts(); 
+        }
         setPosts(data);
       } catch (error) {
         console.error('Error fetching posts:', error);
@@ -45,11 +51,17 @@ export default function Home() {
     };
 
     getPosts();
-  }, []);
+  }, [tab]);
 
   const refreshPosts = async () => {
+    let data;
     try {
-      const data = await getAllPosts(); 
+      if(tab === 'rec'){
+        data = await getAllPosts(); 
+      }
+      else{
+        data = await getFollowingPosts(); 
+      }
       setPosts(data);
     } catch (error) {
       console.error('Error refreshing posts:', error);
@@ -62,17 +74,15 @@ export default function Home() {
 
   return (
     <StyledMain>
-      <TabProvider>
-        <Tab />
-        <PostForm refreshPosts={refreshPosts} />
-        {posts.length > 0 ? (
-          posts.map((post, index) => (
-            <Post key={index} post={post} />
-          ))
-        ) : (
-          <div>No posts available</div>
-        )}
-      </TabProvider>
+      <Tab tab={tab} setTab={setTab} /> 
+      <PostForm refreshPosts={refreshPosts} />
+      {posts.length > 0 ? (
+        posts.map((post, index) => (
+          <Post key={index} post={post} />
+        ))
+      ) : (
+        <div>No posts available</div>
+      )}
     </StyledMain>
   );
 }

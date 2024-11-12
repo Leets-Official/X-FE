@@ -11,7 +11,6 @@ dayjs.extend(relativeTime);
 
 export default function Post({ post }: { post: any }) {
 
-  console.log('상세',post);
   const createdAt = dayjs(post?.createdAt);
   const now = dayjs(); // 현재 시간
 
