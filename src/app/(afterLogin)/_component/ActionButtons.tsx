@@ -3,15 +3,34 @@ import styled from "styled-components";
 import CommentButton from "../../../../public/ic_comment.svg";
 import Retweet from "../../../../public/ic_retweet.svg";
 import Heart from "../../../../public/ic_heart.svg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function ActionButtons() {
-  const [commentCount, setCommentCount] = useState(0);
-  const [repostCount, setRepostCount] = useState(0);
-  const [likeCount, setLikeCount] = useState(0);
+// props 인터페이스 정의
+interface ActionButtonsProps {
+  reply: number;
+  repost: number;
+  like: number;
+}
+
+export default function ActionButtons({
+  reply,
+  repost,
+  like,
+}: ActionButtonsProps) {
+
+  const [commentCount, setCommentCount] = useState<number>(reply || 0);
+  const [repostCount, setRepostCount] = useState<number>(repost || 0);
+  const [likeCount, setLikeCount] = useState<number>(like || 0);
   const [likeStatus, setLikeStatus] = useState<string>("default");
   const [repostStatus, setRepostStatus] = useState<string>("default");
   const [commented, setCommented] = useState(false);
+
+
+  useEffect(() => {
+    setCommentCount(reply);
+    setRepostCount(repost);
+    setLikeCount(like);
+  }, [reply, repost, like]); 
 
   const onClickComment = () => {
     setCommentCount((prev) => prev + 1);

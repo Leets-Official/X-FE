@@ -7,12 +7,24 @@ import PostArticle from "./PostArticle";
 import PostImages from "./PostImages";
 import ActionButtons from "./ActionButtons";
 
-dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
 export default function Post({ post }: { post: any }) {
 
- // console.log(post);
+  console.log('상세',post);
+  const createdAt = dayjs(post?.createdAt);
+  const now = dayjs(); // 현재 시간
+
+  const timeDifference = now.diff(createdAt, 'hour');
+
+  let formattedTime;
+  if (timeDifference < 24) {
+    // 24시간 이내면 'nh'와 같은 형식으로 표시
+    formattedTime = `${timeDifference}h`;
+  } else {
+    // 하루 이상 차이가 나면 'Nov 9'과 같은 날짜 형식으로 표시
+    formattedTime = createdAt.format('MMM D');
+  }
 
   // 이미지 유효하지 않은 경우 디폴트 이미지 적용
   const profileImageUrl = post?.user?.profileImage?.link || "/default_profile_img.svg";
@@ -36,11 +48,12 @@ export default function Post({ post }: { post: any }) {
               <span>{post?.user?.customId}</span>
               &nbsp;·&nbsp;
             </Link>
-            <PostDate>{post?.createdAt}</PostDate>
+            <PostDate>{formattedTime}</PostDate>
           </PostMeta>
           <div>{post?.content}</div>
           <PostImages post={post} />
-          <ActionButtons />
+          <ActionButtons reply={post?.replyCount} repost={post?.repostCount} like={post?.likeCount} />
+
         </PostBody>
       </PostWrapper>
     </PostArticle>
