@@ -2,7 +2,11 @@ import Photo from "../../../../../public/photo.svg";
 import { useRef } from "react";
 import styled from "styled-components";
 
-export default function EditProfileImage() {
+interface ProfileImageProps {
+  onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export default function EditProfileImage({ onImageChange }: ProfileImageProps) {
   const imageRef = useRef<HTMLInputElement>(null);
 
   const onClickButton = () => {
@@ -20,6 +24,7 @@ export default function EditProfileImage() {
         accept="image/*"
         ref={imageRef}
         style={{ display: "none" }}
+        onChange={onImageChange}
       />
     </ProfileImageSection>
   );

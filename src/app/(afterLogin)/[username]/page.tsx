@@ -25,7 +25,7 @@ import BackButton from "../_component/BackButton";
 import Tab from "./_component/Tab";
 import TabProvider from "./_component/TabProvider";
 import Post from "../_component/Post";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { followUser, unfollowUser } from "./api/follow";
@@ -40,6 +40,7 @@ type UserProfile = {
   isFollowing: boolean;
   createdAt: string;
   introduce: string;
+  image: string;
 };
 
 export default function Profile() {
@@ -53,31 +54,52 @@ export default function Profile() {
     isFollowing: false,
     createdAt: "",
     introduce: "",
+    image: "",
   });
 
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState("");
   const [accessToken, setAccessToken] = useState("");
+  const [myCustomId, setMyCustomId] = useState("");
+
+  const params = useParams();
+  const customId = params.username;
+  console.log("customId", customId);
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
     const accessToken = localStorage.getItem("accesstoken");
+    const myId = localStorage.getItem("customId"); //kimjiwon
+    const myUserId = localStorage.getItem("userId"); //19 -> 김지원
+    const id = sessionStorage.getItem("userId"); //4 -> 이강혁
 
-    console.log(userId);
+    console.log(myUserId, myId, id);
     console.log(accessToken);
 
-    if (userId) {
-      setUserId(userId);
-    }
-    if (accessToken) {
-      setAccessToken(accessToken);
-    }
+    if (accessToken) setAccessToken(accessToken);
+    if (myId) setMyCustomId(myId); //kimjiwon
+    if (id) setUserId(id); //4
   }, []);
 
   const fetchUserProfile = async () => {
     try {
+      const isMyProfile = customId === myCustomId;
+      console.log("customId: ", customId);
+      console.log("myCustomId: ", myCustomId);
+      console.log(isMyProfile);
+
+      const targetUserId = isMyProfile
+        ? localStorage.getItem("userId")
+        : userId;
+
+      console.log(targetUserId);
+
+      if (!targetUserId || !accessToken) {
+        console.log("userId 또는 accessToken이 없습니다.");
+        return;
+      }
+
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile/${userId}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile/${targetUserId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -87,6 +109,7 @@ export default function Profile() {
       console.log(response);
 
       const { data } = response.data;
+
       setUserProfile(data);
     } catch (error) {
       console.log("유저 기본 프로필 조회에 오류가 생겼습니다.", error);
@@ -97,17 +120,16 @@ export default function Profile() {
   };
 
   const user = {
-    //id: "jiwon",
-    //nickname: "지원",
-    image: "/default_profile_img.svg",
+    // image: "/default_profile_img.svg",
     backgroundImage: "/backgroundImage.jpg",
-    //message: "welcome to my profile!",
   };
 
   const router = useRouter();
 
   useEffect(() => {
-    fetchUserProfile();
+    if (userId) {
+      fetchUserProfile();
+    }
   }, [userId]);
 
   const onClickFollow = async () => {
@@ -142,11 +164,11 @@ export default function Profile() {
   };
 
   const onClickFollowing = () => {
-    router.push(`/${userId}/following`);
+    router.push(`/${userProfile.customId}/following`);
   };
 
   const onClickFollowers = () => {
-    router.push(`/${userId}/followers`);
+    router.push(`/${userProfile.customId}/followers`);
   };
 
   const onEditProfile = () => {
@@ -164,7 +186,7 @@ export default function Profile() {
         <UserZone>
           <ProfileHeader>
             <UserImage>
-              <img src={user.image} alt={user.image} />
+              <img src={userProfile?.image} alt={userProfile?.image} />
             </UserImage>
             {userProfile?.isMyProfile ? (
               <EditProfileButton onClick={onEditProfile}>
@@ -178,7 +200,7 @@ export default function Profile() {
           </ProfileHeader>
           <UserName>
             <Nickname>{userProfile?.name}</Nickname>
-            <UserId>{userProfile?.customId}</UserId>
+            <UserId>@{userProfile?.customId}</UserId>
           </UserName>
           <Message>{userProfile?.introduce}</Message>
           <UserStats>

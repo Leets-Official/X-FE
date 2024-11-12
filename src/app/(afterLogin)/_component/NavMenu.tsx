@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 import { useSelectedLayoutSegment } from "next/navigation";
 import Link from "next/link";
 import styled from "styled-components";
@@ -8,6 +8,7 @@ import Profile from "../../../../public/ic_profile.svg";
 import FillHome from "../../../../public/ic_fill_home.svg";
 import FillMessage from "../../../../public/ic_fill_message.svg";
 import FillProfile from "../../../../public/ic_fill_profile.svg";
+import { useEffect, useState } from "react";
 
 const NavPill = styled.div`
   display: inline-flex;
@@ -36,7 +37,17 @@ const NavPill = styled.div`
 
 export default function NavMenu() {
   const segment = useSelectedLayoutSegment();
-  const me = { id: "jini" }; // Temporary user info
+  const [customId, setCustomId] = useState("");
+
+  useEffect(() => {
+    const customId = localStorage.getItem("customId");
+
+    console.log(customId);
+
+    if (customId) {
+      setCustomId(customId);
+    }
+  }, []);
 
   return (
     <>
@@ -45,12 +56,20 @@ export default function NavMenu() {
           <NavPill>
             {segment === "home" ? (
               <>
-                <Home alt="홈 이미지" className="w-[24px] h-[24px]" fill="currentColor"  />
+                <Home
+                  alt="홈 이미지"
+                  className="w-[24px] h-[24px]"
+                  fill="currentColor"
+                />
                 <div style={{ fontWeight: "bold" }}>Home</div>
               </>
             ) : (
               <>
-                <FillHome alt="선택된 홈 이미지" className="w-[24px] h-[24px]" fill="currentColor"  />
+                <FillHome
+                  alt="선택된 홈 이미지"
+                  className="w-[24px] h-[24px]"
+                  fill="currentColor"
+                />
                 <div>Home</div>
               </>
             )}
@@ -62,30 +81,46 @@ export default function NavMenu() {
           <NavPill>
             {segment === "messages" ? (
               <>
-                <Message alt="메세지 이미지" className="w-[24px] h-[24px]" fill="currentColor"  />
+                <Message
+                  alt="메세지 이미지"
+                  className="w-[24px] h-[24px]"
+                  fill="currentColor"
+                />
                 <div style={{ fontWeight: "bold" }}>Messages</div>
               </>
             ) : (
               <>
-                <FillMessage alt="선택된 메시지 이미지" className="w-[24px] h-[24px]" fill="currentColor"  />
+                <FillMessage
+                  alt="선택된 메시지 이미지"
+                  className="w-[24px] h-[24px]"
+                  fill="currentColor"
+                />
                 <div>Messages</div>
               </>
             )}
           </NavPill>
         </Link>
       </li>
-      {me?.id && (
+      {customId && (
         <li>
-          <Link href={`/${me?.id}`}>
+          <Link href={`/${customId}`}>
             <NavPill>
-              {segment === me.id ? (
+              {segment === customId ? (
                 <>
-                  <Profile alt="프로필 이미지" className="w-[24px] h-[24px]" fill="currentColor"  />
+                  <Profile
+                    alt="프로필 이미지"
+                    className="w-[24px] h-[24px]"
+                    fill="currentColor"
+                  />
                   <div style={{ fontWeight: "bold" }}>Profile</div>
                 </>
               ) : (
                 <>
-                  <FillProfile alt="선택된 프로필 이미지" className="w-[24px] h-[24px]" fill="currentColor" />
+                  <FillProfile
+                    alt="선택된 프로필 이미지"
+                    className="w-[24px] h-[24px]"
+                    fill="currentColor"
+                  />
                   <div>Profile</div>
                 </>
               )}

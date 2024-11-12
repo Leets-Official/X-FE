@@ -22,19 +22,25 @@ export default function Following() {
   const [accessToken, setAccessToken] = useState("");
   const [userId, setUserId] = useState("");
   const [error, setError] = useState("");
+  const [myId, setMyId] = useState("");
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     const accessToken = localStorage.getItem("accesstoken");
+    const myId = localStorage.getItem("customId");
 
     console.log(userId);
     console.log(accessToken);
+    console.log(myId);
 
     if (userId) {
       setUserId(userId);
     }
     if (accessToken) {
       setAccessToken(accessToken);
+    }
+    if (myId) {
+      setMyId(myId);
     }
   }, []);
 
@@ -72,14 +78,14 @@ export default function Following() {
   const router = useRouter();
 
   const onClickFollowers = () => {
-    router.push(`/${userId}/followers`);
+    router.push(`/${myId}/followers`);
   };
 
   return (
     <Container>
       <Header>
         <BackButton />
-        <Title>{userId}</Title>
+        <Title>{myId}</Title>
       </Header>
       <TabMenu>
         <TabItem onClick={onClickFollowers} active={false}>
@@ -91,7 +97,13 @@ export default function Following() {
       <FollowingList>
         {following && following.length > 0 ? (
           following.map((user) => (
-            <FollowingItem key={user.customId}>
+            <FollowingItem
+              key={user.id}
+              onClick={() => {
+                sessionStorage.setItem("userId", user.id.toString());
+                router.push(`/${user.customId}`);
+              }}
+            >
               <ProfileImage src={user.image} alt={user.name} />
               <UserInfo>
                 <UserName>{user.name}</UserName>
