@@ -56,14 +56,14 @@ export default function Home() {
       <TabProvider>
         <Tab />
         <PostForm />
-        <Post />
-        {/* {posts.length > 0 ? (
+        {posts.length > 0 ? (
           posts.map((post, index) => (
-            <Post key={index} post={post} /> // 가져온 게시물 렌더링
+            <Post key={index} post={post} />
           ))
         ) : (
-          <div>No posts available.</div> // 게시물이 없을 때 표시
-        )} */}
+          // 게시물 없음
+          <div> </div>
+        )}
       </TabProvider>
     </StyledMain>
   );

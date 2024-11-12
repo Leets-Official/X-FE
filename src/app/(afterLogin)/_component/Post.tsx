@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
@@ -10,49 +11,38 @@ import ActionButtons from "./ActionButtons";
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
-export default function Post() {
-  const target = {
-    postId: 1,
-    User: {
-      id: "jiwon",
-      nickname: "지원",
-      image: "/default_profile_img.svg",
-    },
-    content: "X 클론코딩 하는 중",
-    createdAt: new Date(),
-    Images: [
-      { link: "/default_profile_img.svg", imageId: 1 },
-      { link: "/default_profile_img.svg", imageId: 2 },
-      { link: "/default_profile_img.svg", imageId: 3 },
-      { link: "/default_profile_img.svg", imageId: 4 },
-    ],
-  };
+export default function Post({ post }: { post: any }) {
+  const [currentTime, setCurrentTime] = useState<string>(dayjs(post?.createdAt).format("h:mm A · MMM D, YYYY"));
+
+  useEffect(() => {
+    setCurrentTime(dayjs(post?.createdAt).format("h:mm A · MMM D, YYYY"));
+  }, [post?.createdAt]);
+
+  const profileImageUrl = post?.user?.profileImage?.link || "/default_profile_img.svg"; // Fallback 이미지 사용
 
   return (
-    <PostArticle post={target}>
+    <PostArticle post={post}>
       <PostWrapper>
         <PostUserSection>
-          <Link href={`/${target.User.id}`} passHref>
+          <Link href={`/${post?.user?.customId}`} passHref>
             <PostUserImage>
-              <img src={target.User.image} alt={target.User.nickname} />
+              <img src={profileImageUrl} alt={post?.user?.name || 'User'} />
               <PostShade />
             </PostUserImage>
           </Link>
         </PostUserSection>
         <PostBody>
           <PostMeta>
-            <Link href={`/${target.User.id}`} passHref>
-              <span>{target.User.nickname}</span>
+            <Link href={`/${post?.user?.customId}`} passHref>
+              <span>{post?.user?.name}</span>
               &nbsp;
-              <span>@{target.User.id}</span>
+              <span>{post?.user?.customId}</span>
               &nbsp;·&nbsp;
             </Link>
-            <PostDate>
-              {dayjs(target.createdAt).format("h:mm A · MMM D, YYYY")}
-            </PostDate>
+            <PostDate>{currentTime}</PostDate>
           </PostMeta>
-          <div>{target.content}</div>
-          <PostImages post={target} />
+          <div>{post?.content}</div>
+          <PostImages post={post} /> {/* 이미지를 렌더링 */}
           <ActionButtons />
         </PostBody>
       </PostWrapper>
@@ -74,7 +64,7 @@ const PostUserImage = styled.div`
   position: relative;
   display: inline-block;
   width: 40px;
-  height: 410.33px;
+  height: 40px;
   border-radius: 20px;
 
   img {
