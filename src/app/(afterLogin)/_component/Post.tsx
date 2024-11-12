@@ -11,17 +11,45 @@ import ActionButtons from "./ActionButtons";
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
+// export default function Post({ post }: { post: any }) {
+//   const profileImageUrl = post?.user?.profileImage?.link || "/default_profile_img.svg"; // Fallback 이미지 사용
+
+//   return (
+//     <PostArticle post={post}>
+//       <PostWrapper>
+//         <PostUserSection>
+//           <Link href={`/${post?.user?.customId}`} passHref>
+//             <PostUserImage>
+//               <img src={profileImageUrl} alt={post?.user?.name || 'User'} />
+//               <PostShade />
+//             </PostUserImage>
+//           </Link>
+//         </PostUserSection>
+//         <PostBody>
+//           <PostMeta>
+//             <Link href={`/${post?.user?.customId}`} passHref>
+//               <span>{post?.user?.name}</span>
+//               &nbsp;
+//               <span>{post?.user?.customId}</span>
+//               &nbsp;·&nbsp;
+//             </Link>
+//             <PostDate>{post?.createdAt}</PostDate>
+//           </PostMeta>
+//           <div>{post?.content}</div>
+//           <PostImages post={post} />
+//           <ActionButtons />
+//         </PostBody>
+//       </PostWrapper>
+//     </PostArticle>
+//   );
+// }
 export default function Post({ post }: { post: any }) {
-  const [currentTime, setCurrentTime] = useState<string>(dayjs(post?.createdAt).format("h:mm A · MMM D, YYYY"));
 
-  useEffect(() => {
-    setCurrentTime(dayjs(post?.createdAt).format("h:mm A · MMM D, YYYY"));
-  }, [post?.createdAt]);
-
+  console.log(post);
   const profileImageUrl = post?.user?.profileImage?.link || "/default_profile_img.svg"; // Fallback 이미지 사용
 
   return (
-    <PostArticle post={post}>
+    <PostArticle postUserId={post?.user?.customId} postId={post?.id}>
       <PostWrapper>
         <PostUserSection>
           <Link href={`/${post?.user?.customId}`} passHref>
@@ -39,10 +67,10 @@ export default function Post({ post }: { post: any }) {
               <span>{post?.user?.customId}</span>
               &nbsp;·&nbsp;
             </Link>
-            <PostDate>{currentTime}</PostDate>
+            <PostDate>{post?.createdAt}</PostDate>
           </PostMeta>
           <div>{post?.content}</div>
-          <PostImages post={post} /> {/* 이미지를 렌더링 */}
+          <PostImages post={post} />
           <ActionButtons />
         </PostBody>
       </PostWrapper>
