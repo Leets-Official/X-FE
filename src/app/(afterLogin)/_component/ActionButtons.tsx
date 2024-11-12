@@ -4,6 +4,7 @@ import CommentButton from "../../../../public/ic_comment.svg";
 import Retweet from "../../../../public/ic_retweet.svg";
 import Heart from "../../../../public/ic_heart.svg";
 import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';
 
 // props 인터페이스 정의
 interface ActionButtonsProps {
@@ -17,6 +18,7 @@ export default function ActionButtons({
   repost,
   like,
 }: ActionButtonsProps) {
+  const router = useRouter(); 
 
   const [commentCount, setCommentCount] = useState<number>(reply || 0);
   const [repostCount, setRepostCount] = useState<number>(repost || 0);
@@ -33,8 +35,7 @@ export default function ActionButtons({
   }, [reply, repost, like]); 
 
   const onClickComment = () => {
-    setCommentCount((prev) => prev + 1);
-    setCommented(!commented);
+    router.push('/compose/post');
   };
 
   const onClickRepost = () => {
