@@ -22,19 +22,25 @@ export default function Following() {
   const [accessToken, setAccessToken] = useState("");
   const [userId, setUserId] = useState("");
   const [error, setError] = useState("");
+  const [myId, setMyId] = useState("");
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     const accessToken = localStorage.getItem("accesstoken");
+    const myId = localStorage.getItem("customId");
 
     console.log(userId);
     console.log(accessToken);
+    console.log(myId);
 
     if (userId) {
       setUserId(userId);
     }
     if (accessToken) {
       setAccessToken(accessToken);
+    }
+    if (myId) {
+      setMyId(myId);
     }
   }, []);
 
@@ -72,14 +78,14 @@ export default function Following() {
   const router = useRouter();
 
   const onClickFollowers = () => {
-    router.push(`/${userId}/followers`);
+    router.push(`/${myId}/followers`);
   };
 
   return (
     <Container>
       <Header>
         <BackButton />
-        <Title>{userId}</Title>
+        <Title>{myId}</Title>
       </Header>
       <TabMenu>
         <TabItem onClick={onClickFollowers} active={false}>

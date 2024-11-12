@@ -22,19 +22,25 @@ export default function Followers() {
   const [accessToken, setAccessToken] = useState("");
   const [userId, setUserId] = useState("");
   const [error, setError] = useState("");
+  const [myId, setMyId] = useState("");
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     const accessToken = localStorage.getItem("accesstoken");
+    const myId = localStorage.getItem("customId");
 
     console.log(userId);
     console.log(accessToken);
+    console.log(myId);
 
     if (userId) {
       setUserId(userId);
     }
     if (accessToken) {
       setAccessToken(accessToken);
+    }
+    if (myId) {
+      setMyId(myId);
     }
   }, []);
 
@@ -72,14 +78,14 @@ export default function Followers() {
   const router = useRouter();
 
   const onClickFollowing = () => {
-    router.push(`/${userId}/following`);
+    router.push(`/${myId}/following`);
   };
 
   return (
     <Container>
       <Header>
         <BackButton />
-        <Title>{/* 이후 api  연결 후 수정할 예정*/}</Title>
+        <Title>{myId}</Title>
       </Header>
       <TabMenu>
         <TabItem active={true}>Followers</TabItem>
@@ -120,6 +126,7 @@ const Container = styled.div`
   border-left-width: 1px;
   border-left-style: solid;
   border-right-style: solid;
+  align-items: stretch;
 `;
 
 const Header = styled.div`
