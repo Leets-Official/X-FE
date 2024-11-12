@@ -4,6 +4,9 @@ import styled from "styled-components";
 import PostForm from "./_component/PostForm";
 import Tab from "./_component/Tab";
 import TabProvider from "./_component/TabProvider";
+import Post from "../_component/Post";
+import { getAllPosts } from "@/_service/post";
+import { useEffect, useState } from "react";
 
 const StyledMain = styled.main`
   width: 600px;
@@ -26,11 +29,41 @@ const StyledMain = styled.main`
 `;
 
 export default function Home() {
+  const [posts, setPosts] = useState<any[]>([]); // 게시물 상태
+  const [loading, setLoading] = useState<boolean>(true); // 로딩 상태
+
+  useEffect(() => {
+    const getPosts = async () => {
+      try {
+        const data = await getAllPosts(); // fetchPosts 함수 실행
+        setPosts(data); // 데이터를 상태에 저장
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      } finally {
+        setLoading(false); // 로딩 완료
+      }
+    };
+
+    getPosts();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; // 로딩 중 표시
+  }
+
   return (
     <StyledMain>
       <TabProvider>
         <Tab />
         <PostForm />
+        <Post />
+        {/* {posts.length > 0 ? (
+          posts.map((post, index) => (
+            <Post key={index} post={post} /> // 가져온 게시물 렌더링
+          ))
+        ) : (
+          <div>No posts available.</div> // 게시물이 없을 때 표시
+        )} */}
       </TabProvider>
     </StyledMain>
   );
