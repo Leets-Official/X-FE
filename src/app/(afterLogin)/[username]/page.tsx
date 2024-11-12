@@ -58,19 +58,25 @@ export default function Profile() {
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState("");
   const [accessToken, setAccessToken] = useState("");
+  const [myId, setMyId] = useState("");
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     const accessToken = localStorage.getItem("accesstoken");
+    const myId = localStorage.getItem("customId");
 
     console.log(userId);
     console.log(accessToken);
+    console.log(myId);
 
     if (userId) {
       setUserId(userId);
     }
     if (accessToken) {
       setAccessToken(accessToken);
+    }
+    if (myId) {
+      setMyId(myId);
     }
   }, []);
 
@@ -142,11 +148,11 @@ export default function Profile() {
   };
 
   const onClickFollowing = () => {
-    router.push(`/${userId}/following`);
+    router.push(`/${myId}/following`);
   };
 
   const onClickFollowers = () => {
-    router.push(`/${userId}/followers`);
+    router.push(`/${myId}/followers`);
   };
 
   const onEditProfile = () => {
@@ -178,7 +184,7 @@ export default function Profile() {
           </ProfileHeader>
           <UserName>
             <Nickname>{userProfile?.name}</Nickname>
-            <UserId>{userProfile?.customId}</UserId>
+            <UserId>@{userProfile?.customId}</UserId>
           </UserName>
           <Message>{userProfile?.introduce}</Message>
           <UserStats>
