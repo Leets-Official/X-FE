@@ -1,7 +1,7 @@
 "use client";
 import styled from "styled-components";
 import BackButton from "@/(afterLogin)/_component/BackButton";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -22,16 +22,16 @@ export default function Following() {
   const [accessToken, setAccessToken] = useState("");
   const [userId, setUserId] = useState("");
   const [error, setError] = useState("");
-  const [myId, setMyId] = useState("");
+
+  const params = useParams();
+  const myId = params.username;
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     const accessToken = localStorage.getItem("accesstoken");
-    const myId = localStorage.getItem("customId");
 
     if (userId) setUserId(userId);
     if (accessToken) setAccessToken(accessToken);
-    if (myId) setMyId(myId);
   }, []);
 
   const fetchFollowing = async () => {
