@@ -13,7 +13,8 @@ export default function SinglePost() {
   const [posts, setPosts] = useState<unknown[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const { id } = useParams();
+  const params = useParams();
+  const id = params.id[0];
 
   // id를 숫자로 변환(params에서 가져올 때는 string으로 가져와서)
   useEffect(() => {

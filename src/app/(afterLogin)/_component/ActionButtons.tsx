@@ -30,7 +30,7 @@ export default function ActionButtons({
   const [likeCount, setLikeCount] = useState<number>(like || 0);
   const [likeStatus, setLikeStatus] = useState<string>("default");
   const [repostStatus, setRepostStatus] = useState<string>("default");
-  const [commented, setCommented] = useState(false);
+  const [commented] = useState(false);
 
   useEffect(() => {
     setCommentCount(reply);

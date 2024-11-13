@@ -61,11 +61,11 @@ export default function Profile() {
     image: "",
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<string | null>(null);
-  const [userId, setUserId] = useState("");
 
-  const [posts, setPosts] = useState<unknown[]>([]);
+  //const [userId, setUserId] = useState("");
+
+  const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const accessToken = localStorage.getItem("accesstoken") || "";
@@ -89,26 +89,17 @@ export default function Profile() {
 
   const params = useParams();
   const customId = params.username;
-
-  useEffect(() => {
-    const id = sessionStorage.getItem("userId"); //4 -> 이강혁
-    console.log(id, "유저의 유저 아이디");
-    if (id) setUserId(id); //4
-  }, []);
-
+  console.log("커스텀 아이디", customId);
   const [profileImageUrl, setProfileImageUrl] = useState<string>("");
 
   const fetchUserProfile = async () => {
     try {
-      const isMyProfile = customId === localStorage.getItem("customId");
-
       // console.log("커아",customId,"내아",localStorage.getItem("customId"));
-      const targetUserId = isMyProfile
-        ? localStorage.getItem("userId")
-        : userId;
 
-      if (!targetUserId || !accessToken) {
-        // console.log(`userId:${targetUserId} 또는 accessToken:${accessToken}이 없습니다.`);
+      if (!customId || !accessToken) {
+        console.log(
+          `userId:${customId} 또는 accessToken:${accessToken}이 없습니다.`
+        );
         return;
       }
 
@@ -143,6 +134,7 @@ export default function Profile() {
     } catch (error) {
       console.log("유저 기본 프로필 조회에 오류가 생겼습니다.", error);
       setError("유저 기본 프로필 조회에 오류가 발생하였습니다.");
+      console.log(error);
     }
   };
 

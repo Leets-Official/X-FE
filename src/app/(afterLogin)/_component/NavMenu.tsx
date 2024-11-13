@@ -8,7 +8,7 @@ import Profile from "../../../../public/ic_profile.svg";
 import FillHome from "../../../../public/ic_fill_home.svg";
 import FillMessage from "../../../../public/ic_fill_message.svg";
 import FillProfile from "../../../../public/ic_fill_profile.svg";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 
 const NavPill = styled.div`
@@ -61,7 +61,6 @@ export default function NavMenu() {
 
         const { data } = response.data;
         console.log("API 응답 데이터:", data);
-
       } catch (error) {
         console.error("API 요청 중 오류가 발생했습니다:", error);
       }
