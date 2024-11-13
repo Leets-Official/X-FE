@@ -10,50 +10,56 @@ import {
 } from "./PostStyle";
 
 type Image = {
-  imageId: number;
-  link: string;
+  id: number;
+  url: string;
 };
 
 type Props = {
   post: {
     postId: number;
     content: string;
-    User: {
-      id: string;
-      nickname: string;
-      image: string;
+    user: {
+      userId: number;
+      name: string;
+      customId: string;
+      profileImage: {
+        name: string;
+        url: string;
+      };
     };
-    createdAt: Date;
-    Images: Image[];
+    createdAt: string;
+    images: Image[];
   };
 };
 
 export default function PostImages({ post }: Props) {
-  if (!post?.Images || post?.Images.length === 0) return null;
+  if (!post?.images || post?.images.length === 0) return null;
 
-  if (post.Images.length === 1) {
-    const image = post.Images[0];
+  console.log(post.images); // post.images가 제대로 출력되는지 확인
+
+  if (post.images.length === 1) {
+    const image = post.images[0];
     return (
       <PostImageSection>
         <SingleImageLink
-          href={`/${post.User.id}/status/${post.postId}/photo/${image.imageId}`}
-          style={{ backgroundImage: `url(${image.link})` }}
+          href={`/${post.user.customId}/status/${post.postId}/photo/${image.id}`}
+          style={{ backgroundImage: `url(${image.url})` }}
         >
-          <img src={image.link} alt={`image-${image.imageId}`} />
+          <img src={image.url} alt={`image-${image.id}`} />
         </SingleImageLink>
       </PostImageSection>
     );
   }
 
-  if (post.Images.length === 2) {
+  if (post.images.length === 2) {
     return (
       <PostImageSection>
         <TwoImageWrapper>
-          {post.Images.map((image) => (
+          {post.images.map((image) => (
             <ImageLink
-              key={image.imageId}
-              href={`/${post.User.id}/status/${post.postId}/photo/${image.imageId}`}
-              style={{ backgroundImage: `url(${image.link})` }}
+              key={image.id}
+              href={`/${post.user.customId}/status/${post.postId}/photo/${image.id}`}
+              style={{ backgroundImage: `url(${image.url})` }}
             />
           ))}
         </TwoImageWrapper>
@@ -61,22 +67,22 @@ export default function PostImages({ post }: Props) {
     );
   }
 
-  if (post.Images.length === 3) {
+  if (post.images.length === 3) {
     return (
       <PostImageSection>
         <ThreeImageWrapper>
           <ImageLink
-            href={`/${post.User.id}/status/${post.postId}/photo/${post.Images[0].imageId}`}
-            style={{ backgroundImage: `url(${post.Images[0]?.link})` }}
+            href={`/${post.user.customId}/status/${post.postId}/photo/${post.images[0].id}`}
+            style={{ backgroundImage: `url(${post.images[0]?.url})` }}
           />
           <ThreeImageColumn>
             <ImageLink
-              href={`/${post.User.id}/status/${post.postId}/photo/${post.Images[1].imageId}`}
-              style={{ backgroundImage: `url(${post.Images[1]?.link})` }}
+              href={`/${post.user.customId}/status/${post.postId}/photo/${post.images[1].id}`}
+              style={{ backgroundImage: `url(${post.images[1]?.url})` }}
             />
             <ImageLink
-              href={`/${post.User.id}/status/${post.postId}/photo/${post.Images[2].imageId}`}
-              style={{ backgroundImage: `url(${post.Images[2]?.link})` }}
+              href={`/${post.user.customId}/status/${post.postId}/photo/${post.images[2].id}`}
+              style={{ backgroundImage: `url(${post.images[2]?.url})` }}
             />
           </ThreeImageColumn>
         </ThreeImageWrapper>
@@ -84,15 +90,15 @@ export default function PostImages({ post }: Props) {
     );
   }
 
-  if (post.Images.length === 4) {
+  if (post.images.length === 4) {
     return (
       <PostImageSection>
         <FourImageWrapper>
-          {post.Images.map((image) => (
+          {post.images.map((image) => (
             <FourImageLink
-              key={image.imageId}
-              href={`/${post.User.id}/status/${post.postId}/photo/${image.imageId}`}
-              style={{ backgroundImage: `url(${image.link})` }}
+              key={image.id}
+              href={`/${post.user.customId}/status/${post.postId}/photo/${image.id}`}
+              style={{ backgroundImage: `url(${image.url})` }}
             />
           ))}
         </FourImageWrapper>
