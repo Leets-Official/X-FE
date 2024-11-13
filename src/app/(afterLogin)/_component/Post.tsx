@@ -26,8 +26,7 @@ export default function Post({ post }: { post: any }) {
   }
 
   // 이미지 유효하지 않은 경우 디폴트 이미지 적용
-  const profileImageUrl =
-    post?.user?.profileImage?.link || "/default_profile_img.svg";
+ const profileImageUrl = post?.user?.profileImage?.url || "/default_profile_img.svg";
 
   return (
     <Main>
