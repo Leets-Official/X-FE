@@ -25,6 +25,7 @@ type Props = {
     };
     createdAt: Date;
     Images: Image[];
+    isLikedByUser: boolean;
   };
 };
 

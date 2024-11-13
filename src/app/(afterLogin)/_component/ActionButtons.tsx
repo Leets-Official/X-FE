@@ -4,21 +4,26 @@ import CommentButton from "../../../../public/ic_comment.svg";
 import Retweet from "../../../../public/ic_retweet.svg";
 import Heart from "../../../../public/ic_heart.svg";
 import { useState, useEffect } from "react";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import { postDeleteLiked, postLiked } from "@/_service/post";
 
 // props 인터페이스 정의
 interface ActionButtonsProps {
   reply: number;
   repost: number;
   like: number;
+  postId: number;
+  isLikedByUser: boolean;
 }
 
 export default function ActionButtons({
   reply,
   repost,
   like,
+  postId,
+  isLikedByUser,
 }: ActionButtonsProps) {
-  const router = useRouter(); 
+  const router = useRouter();
 
   const [commentCount, setCommentCount] = useState<number>(reply || 0);
   const [repostCount, setRepostCount] = useState<number>(repost || 0);
@@ -27,15 +32,14 @@ export default function ActionButtons({
   const [repostStatus, setRepostStatus] = useState<string>("default");
   const [commented, setCommented] = useState(false);
 
-
   useEffect(() => {
     setCommentCount(reply);
     setRepostCount(repost);
     setLikeCount(like);
-  }, [reply, repost, like]); 
+  }, [reply, repost, like]);
 
   const onClickComment = () => {
-    router.push('/compose/post');
+    router.push("/compose/post");
   };
 
   const onClickRepost = () => {
@@ -48,12 +52,14 @@ export default function ActionButtons({
     }
   };
 
-  const onClickHeart = () => {
+  const onClickHeart = async () => {
     if (likeStatus === "default") {
       setLikeCount((prev) => prev + 1);
+      postLiked(postId, isLikedByUser);
       setLikeStatus("liked");
     } else {
       setLikeCount((prev) => prev - 1);
+      postDeleteLiked(postId, isLikedByUser);
       setLikeStatus("default");
     }
   };
@@ -87,8 +93,8 @@ const ActionButtonsWrapper = styled.div`
   justify-content: space-between;
   flex-direction: row;
   column-gap: 4px;
-  margin-left: 5px;
-  margin-top: 3%;
+  margin-left: 10%;
+  margin-bottom: 5px;
 `;
 
 const ButtonWrapper = styled.div<{ buttonType: string }>`
