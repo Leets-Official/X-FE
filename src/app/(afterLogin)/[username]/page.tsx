@@ -29,10 +29,10 @@ import TabProvider from "./_component/TabProvider";
 import Post from "../_component/Post";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { followUser, unfollowUser } from "./api/follow";
 import { getFollowingPosts } from "@/_service/post";
 import MessageIcon from "../../../../public/ic_message.svg";
+import { fetchUserProfile } from "@/_service/profile";
 
 type UserProfile = {
   userId: number;
@@ -61,31 +61,12 @@ export default function Profile() {
     image: "",
   });
 
-  const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const [myCustomId, setMyCustomId] = useState("");
 
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-
-  // useEffect(() => {
-  //   const getPosts = async () => {
-  //     try {
-  //       const data = await getFollowingPosts();
-  //       setPosts(data);
-  //       if (loading) {
-  //         return <div>Loading...</div>;
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching posts:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   getPosts();
-  // });
 
   useEffect(() => {
     const getPosts = async () => {
@@ -105,11 +86,12 @@ export default function Profile() {
   }, [loading]); // loading 상태에 의존하여 다시 호출되지 않도록 수정
 
   const params = useParams();
-  const customId = params.username;
+  const customId = Array.isArray(params.username) ? params.username[0] : params.username
+  console.log("customId:", customId);
+
   console.log("customId", customId);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accesstoken");
     const myId = localStorage.getItem("customId"); //kimjiwon
     const myUserId = localStorage.getItem("userId"); //19 -> 김지원
     const id = sessionStorage.getItem("userId"); //4 -> 이강혁
@@ -124,48 +106,6 @@ export default function Profile() {
 
   const [profileImageUrl, setProfileImageUrl] = useState<string>("");
 
-  const fetchUserProfile = async () => {
-    try {
-      const isMyProfile = customId === myCustomId;
-      console.log("customId: ", customId);
-      console.log("myCustomId: ", myCustomId);
-      console.log(isMyProfile);
-
-      const targetUserId = isMyProfile
-        ? localStorage.getItem("userId")
-        : userId;
-
-      console.log(targetUserId);
-
-      if (!targetUserId || !accessToken) {
-        console.log("userId 또는 accessToken이 없습니다.");
-        return;
-      }
-
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile/${targetUserId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      const imageUrl =
-        response.data.data.profileImage?.url || "/default_profile_img.svg";
-      setProfileImageUrl(imageUrl);
-
-      console.log("response: ", response);
-
-      const { data } = response.data;
-
-      setUserProfile(data);
-    } catch (error) {
-      console.log("유저 기본 프로필 조회에 오류가 생겼습니다.", error);
-      setError("유저 기본 프로필 조회에 오류가 발생하였습니다.");
-    }
-
-    if (error) return <div>{error}</div>;
-  };
 
   console.log("imageUrl: ", profileImageUrl);
 
@@ -178,9 +118,10 @@ export default function Profile() {
 
   useEffect(() => {
     if (userId) {
-      fetchUserProfile();
+      fetchUserProfile(customId, myCustomId, userId, setProfileImageUrl, setUserProfile);
     }
   }, [userId]);
+  
 
   const onClickFollow = async () => {
     if (!userProfile || !userProfile.userId) {
@@ -224,8 +165,6 @@ export default function Profile() {
   const onEditProfile = () => {
     router.push(`/settings/profile`);
   };
-
-  //const profileImageUrl = userProfile?.image || "/default_profile_img.svg";
 
   return (
     <TabProvider>
