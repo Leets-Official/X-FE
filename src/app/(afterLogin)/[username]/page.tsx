@@ -20,6 +20,8 @@ import {
   StatButton,
   BoldText,
   Divider,
+  ButtonGroup,
+  MessageButton,
 } from "./styles";
 import BackButton from "../_component/BackButton";
 import Tab from "./_component/Tab";
@@ -29,6 +31,8 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { followUser, unfollowUser } from "./api/follow";
+import { getFollowingPosts } from "@/_service/post";
+import MessageIcon from "../../../../public/ic_message.svg";
 
 type UserProfile = {
   userId: number;
@@ -61,6 +65,27 @@ export default function Profile() {
   const [userId, setUserId] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const [myCustomId, setMyCustomId] = useState("");
+
+  const [posts, setPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const getPosts = async () => {
+      try {
+        const data = await getFollowingPosts();
+        setPosts(data);
+        if (loading) {
+          return <div>Loading...</div>;
+        }
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getPosts();
+  });
 
   const params = useParams();
   const customId = params.username;
@@ -193,9 +218,14 @@ export default function Profile() {
                 Edit profile
               </EditProfileButton>
             ) : (
-              <FollowButton onClick={onClickFollow}>
-                {userProfile?.isFollowing ? "Unfollow" : "Follow"}
-              </FollowButton>
+              <ButtonGroup>
+                <MessageButton>
+                  <MessageIcon />
+                </MessageButton>
+                <FollowButton onClick={onClickFollow}>
+                  {userProfile?.isFollowing ? "Unfollow" : "Follow"}
+                </FollowButton>
+              </ButtonGroup>
             )}
           </ProfileHeader>
           <UserName>
@@ -215,7 +245,11 @@ export default function Profile() {
         <Tab />
         <Divider />
         <PostList>
-          <Post />
+          {posts.length > 0 ? (
+            posts.map((post, index) => <Post key={index} post={post} />)
+          ) : (
+            <div> </div>
+          )}
         </PostList>
       </Main>
     </TabProvider>
