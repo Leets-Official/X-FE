@@ -29,22 +29,12 @@ export default function Followers() {
     const accessToken = localStorage.getItem("accesstoken");
     const myId = localStorage.getItem("customId");
 
-    console.log(userId);
-    console.log(accessToken);
-    console.log(myId);
-
-    if (userId) {
-      setUserId(userId);
-    }
-    if (accessToken) {
-      setAccessToken(accessToken);
-    }
-    if (myId) {
-      setMyId(myId);
-    }
+    if (userId) setUserId(userId);
+    if (accessToken) setAccessToken(accessToken);
+    if (myId) setMyId(myId);
   }, []);
 
-  const fetchFolloweres = async () => {
+  const fetchFollowers = async () => {
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/follows/follower/${userId}`,
@@ -54,26 +44,36 @@ export default function Followers() {
           },
         }
       );
-      console.log(response.data);
+
+      console.log("API 응답 데이터:", JSON.stringify(response.data, null, 2));
 
       const data = response.data.data;
       if (Array.isArray(data)) {
-        setFollower(data);
+        // API 응답 데이터 형식에 맞게 데이터를 포맷팅합니다.
+        const formattedData = data.map((item) => {
+          const user = item.response;
+          return {
+            id: user.userId,
+            name: user.name,
+            customId: user.customId,
+            introduce: user.introduce || "소개가 없습니다.",
+            image: user.profileImage?.url || "/default_profile_img.svg",
+          };
+        });
+        setFollower(formattedData);
       } else {
         setFollower([]);
       }
     } catch (error) {
-      console.log("팔로워 목록 조회 오류 발생", error);
+      console.error("팔로워 목록 조회 오류 발생:", error);
       setError("팔로워 목록을 불러올 수 없습니다.");
       setFollower([]);
     }
-
-    if (error) return <div>{error}</div>;
   };
 
   useEffect(() => {
     if (userId && accessToken) {
-      fetchFolloweres();
+      fetchFollowers();
     }
   }, [userId, accessToken]);
 
@@ -82,6 +82,8 @@ export default function Followers() {
   const onClickFollowing = () => {
     router.push(`/${myId}/following`);
   };
+
+  console.log("저장된 팔로워 데이터:", follower);
 
   return (
     <Container>
@@ -97,7 +99,7 @@ export default function Followers() {
       </TabMenu>
       <Divider />
       <FollowingList>
-        {follower && follower.length > 0 ? (
+        {follower.length > 0 ? (
           follower.map((user) => (
             <FollowingItem
               key={user.id}
@@ -109,7 +111,7 @@ export default function Followers() {
               <ProfileImage src={user.image} alt={user.name} />
               <UserInfo>
                 <UserName>{user.name}</UserName>
-                <UserHandle>{user.customId}</UserHandle>
+                <UserHandle>@{user.customId}</UserHandle>
                 <UserIntroduce>{user.introduce}</UserIntroduce>
               </UserInfo>
               <FollowButton>Following</FollowButton>
@@ -123,6 +125,7 @@ export default function Followers() {
   );
 }
 
+// 스타일 컴포넌트 정의
 const Container = styled.div`
   padding: 16px;
   background-color: #000;
@@ -134,7 +137,6 @@ const Container = styled.div`
   border-left-width: 1px;
   border-left-style: solid;
   border-right-style: solid;
-  align-items: stretch;
 `;
 
 const Header = styled.div`

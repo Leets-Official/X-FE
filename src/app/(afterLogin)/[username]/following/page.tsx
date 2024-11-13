@@ -29,19 +29,9 @@ export default function Following() {
     const accessToken = localStorage.getItem("accesstoken");
     const myId = localStorage.getItem("customId");
 
-    console.log(userId);
-    console.log(accessToken);
-    console.log(myId);
-
-    if (userId) {
-      setUserId(userId);
-    }
-    if (accessToken) {
-      setAccessToken(accessToken);
-    }
-    if (myId) {
-      setMyId(myId);
-    }
+    if (userId) setUserId(userId);
+    if (accessToken) setAccessToken(accessToken);
+    if (myId) setMyId(myId);
   }, []);
 
   const fetchFollowing = async () => {
@@ -54,21 +44,30 @@ export default function Following() {
           },
         }
       );
-      console.log(response.data);
+
+      console.log("API 응답 데이터:", JSON.stringify(response.data, null, 2));
 
       const data = response.data.data;
       if (Array.isArray(data)) {
-        setFollowing(data);
+        const formattedData = data.map((item) => {
+          const user = item.response;
+          return {
+            id: user.userId,
+            name: user.name,
+            customId: user.customId,
+            introduce: user.introduce || "소개가 없습니다.",
+            image: user.profileImage?.url || "/default_profile_img.svg",
+          };
+        });
+        setFollowing(formattedData);
       } else {
         setFollowing([]);
       }
     } catch (error) {
-      console.log("팔로워 목록 조회 오류 발생", error);
-      setError("팔로워 목록을 불러올 수 없습니다.");
+      console.error("팔로잉 목록 조회 오류 발생:", error);
+      setError("팔로잉 목록을 불러올 수 없습니다.");
       setFollowing([]);
     }
-
-    if (error) return <div>{error}</div>;
   };
 
   useEffect(() => {
@@ -97,7 +96,7 @@ export default function Following() {
       </TabMenu>
       <Divider />
       <FollowingList>
-        {following && following.length > 0 ? (
+        {following.length > 0 ? (
           following.map((user) => (
             <FollowingItem
               key={user.id}
@@ -109,7 +108,7 @@ export default function Following() {
               <ProfileImage src={user.image} alt={user.name} />
               <UserInfo>
                 <UserName>{user.name}</UserName>
-                <UserHandle>{user.customId}</UserHandle>
+                <UserHandle>@{user.customId}</UserHandle>
                 <UserIntroduce>{user.introduce}</UserIntroduce>
               </UserInfo>
               <FollowButton>Following</FollowButton>
