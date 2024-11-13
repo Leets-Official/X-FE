@@ -81,7 +81,7 @@ export default function Home() {
           <Post key={index} post={post} />
         ))
       ) : (
-        <div>No posts available</div>
+        <div> </div>
       )}
     </StyledMain>
   );
