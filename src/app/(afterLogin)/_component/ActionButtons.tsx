@@ -93,7 +93,6 @@ const ActionButtonsWrapper = styled.div`
   justify-content: space-between;
   flex-direction: row;
   column-gap: 4px;
-  margin-left: 10%;
   margin-bottom: 5px;
 `;
 

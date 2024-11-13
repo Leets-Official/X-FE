@@ -26,6 +26,7 @@ const PostContainer = styled.article`
   padding: 12px 16px;
   cursor: pointer;
   transition: background-color 0.2s, box-shadow 0.2s;
+  border-bottom-width: 1px;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.03);
