@@ -111,7 +111,6 @@ export const FollowButton = styled.button`
   font-size: 15px;
   color: white;
   cursor: pointer;
-  margin-left: 50%;
 
   &:hover {
     background-color: rgb(39, 44, 48);
@@ -171,4 +170,35 @@ export const Divider = styled.div`
   background-color: #71767b;
   margin-top: 8px;
   margin-bottom: 8px;
+`;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const MessageButton = styled.button`
+  display: flex;
+  align-items: center;
+  //justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgb(207, 217, 222);
+  border-radius: 17px;
+  //background-color: transparent;
+  cursor: pointer;
+  margin-left: 180%;
+  //transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(83, 100, 113, 0.1);
+  }
+
+  svg {
+    width: 55px;
+    height: 20px;
+    fill: white;
+  }
 `;
