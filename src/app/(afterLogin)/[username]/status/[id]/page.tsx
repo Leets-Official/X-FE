@@ -1,4 +1,4 @@
-"use client";  // 클라이언트 전용 코드로 명시
+"use client"; // 클라이언트 전용 코드로 명시
 
 import BackButton from "@/(afterLogin)/_component/BackButton";
 import Post from "@/(afterLogin)/_component/Post";
@@ -10,7 +10,7 @@ import { getPostDetails } from "@/_service/post";
 
 export default function SinglePost() {
   const [postId, setPostId] = useState<number | undefined>(undefined);
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<unknown[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const { id } = useParams();
@@ -22,7 +22,7 @@ export default function SinglePost() {
       if (!isNaN(numericPostId)) {
         setPostId(numericPostId);
       } else {
-        console.error('Invalid postId');
+        console.error("Invalid postId");
       }
     }
   }, [id]);
@@ -35,17 +35,17 @@ export default function SinglePost() {
           const data = await getPostDetails(postId);
           setPosts(data);
         } else {
-          console.error('Invalid postId');
+          console.error("Invalid postId");
         }
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error("Error fetching posts:", error);
       } finally {
         setLoading(false);
       }
     };
 
     getDetails();
-  }, [postId]); 
+  }, [postId]);
 
   if (loading) {
     return <div>Loading...</div>;

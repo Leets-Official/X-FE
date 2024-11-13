@@ -61,10 +61,11 @@ export default function Profile() {
     image: "",
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState("");
 
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<unknown[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const accessToken = localStorage.getItem("accesstoken") || "";
@@ -91,7 +92,7 @@ export default function Profile() {
 
   useEffect(() => {
     const id = sessionStorage.getItem("userId"); //4 -> 이강혁
-    console.log(id,"유저의 유저 아이디");
+    console.log(id, "유저의 유저 아이디");
     if (id) setUserId(id); //4
   }, []);
 
@@ -102,13 +103,15 @@ export default function Profile() {
       const isMyProfile = customId === localStorage.getItem("customId");
 
       // console.log("커아",customId,"내아",localStorage.getItem("customId"));
-      const targetUserId = isMyProfile ? localStorage.getItem("userId") : userId;
-  
+      const targetUserId = isMyProfile
+        ? localStorage.getItem("userId")
+        : userId;
+
       if (!targetUserId || !accessToken) {
         // console.log(`userId:${targetUserId} 또는 accessToken:${accessToken}이 없습니다.`);
         return;
       }
-  
+
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile/${customId}`,
         {
@@ -117,13 +120,13 @@ export default function Profile() {
           },
         }
       );
-  
+
       const { data } = response.data;
-  
+
       // 프로필 이미지 URL 설정
       const imageUrl = data.profileImage?.url || "/default_profile_img.svg";
       setProfileImageUrl(imageUrl);
-  
+
       // `setUserProfile`에 객체 전달
       setUserProfile({
         userId: data.userId,
@@ -137,13 +140,11 @@ export default function Profile() {
         introduce: data.introduce || "소개가 없습니다.",
         image: imageUrl,
       });
-
     } catch (error) {
       console.log("유저 기본 프로필 조회에 오류가 생겼습니다.", error);
       setError("유저 기본 프로필 조회에 오류가 발생하였습니다.");
     }
   };
-  
 
   console.log("imageUrl: ", profileImageUrl);
 
@@ -201,7 +202,6 @@ export default function Profile() {
     router.push(`/settings/profile`);
   };
 
-  
   return (
     <TabProvider>
       <Main>
