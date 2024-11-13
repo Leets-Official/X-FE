@@ -1,107 +1,68 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import styled from "styled-components";
 import TextareaAutosize from "react-textarea-autosize";
-import { ChangeEventHandler, FormEventHandler, KeyboardEventHandler, useEffect, useState } from "react";
-// import useSocket from "@/app/(afterLogin)/messages/[room]/_lib/useSocket";
-// import { useSession } from "next-auth/react";
-// import { InfiniteData, useQueryClient } from "@tanstack/react-query";
-// import { Message } from "@/model/Message";
-// import { useMessageStore } from "@/store/message";
-import Send from '../../../../../../public/ic_send.svg';
+import { ChangeEventHandler, KeyboardEventHandler, useState } from "react";
+import Send from "../../../../../../public/ic_send.svg";
 
 interface Props {
-  id: string;
+  onSend: (message: {
+    roomId: number;
+    senderId: number;
+    senderName: string;
+    content: string;
+  }) => void;
+  roomId: number;
+  currentUserId: number;
+  currentUserName: string;
 }
 
-export default function MessageForm() {
-  const [content, setContent] = useState('');
-  // const setGoDown = useMessageStore().setGoDown;
-  // const [socket] = useSocket();
-  // const { data: session } = useSession();
-  // const queryClient = useQueryClient();
+export default function MessageForm({
+  onSend,
+  roomId,
+  currentUserId,
+  currentUserName,
+}: Props) {
+  const [content, setContent] = useState("");
 
-  const onChangeContent: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+  const onChangeContent: ChangeEventHandler<HTMLTextAreaElement> = (e) =>
     setContent(e.target.value);
-  };
 
   const onSubmit = () => {
-    console.log("전송됨");
-    // if (!session?.user?.email) {
-    //   return;
-    // }
-    // const ids = [session?.user?.email, id];
-    // ids.sort();
-
-    // socket.io
-    // socket?.emit('sendMessage', {
-    //   senderId: session?.user?.email,
-    //   receiverId: id,
-    //   content,
-    // });
-
-    // 리액트 쿼리 데이터에 추가
-  //   const exMessages = queryClient.getQueryData(['rooms', {
-  //     senderId: session?.user?.email,
-  //     receiverId: id
-  //   }, 'messages']) as InfiniteData<Message[]>;
-
-  //   if (exMessages && typeof exMessages === 'object') {
-  //     const newMessages = {
-  //       ...exMessages,
-  //       pages: [
-  //         ...exMessages.pages
-  //       ],
-  //     };
-  //     const lastPage = newMessages.pages.at(-1);
-  //     const newLastPage = lastPage ? [...lastPage] : [];
-  //     let lastMessageId = lastPage?.at(-1)?.messageId;
-
-  //     newLastPage.push({
-  //       senderId: session.user.email,
-  //       receiverId: id,
-  //       content,
-  //       room: ids.join('-'),
-  //       messageId: lastMessageId ? lastMessageId + 1 : 1,
-  //       createdAt: new Date(),
-  //     });
-
-  //     newMessages.pages[newMessages.pages.length - 1] = newLastPage;
-  //     queryClient.setQueryData(['rooms', { senderId: session?.user?.email, receiverId: id }, 'messages'], newMessages);
-  //     setGoDown(true);
-  //   }
-  //   setContent('');
+    if (content.trim()) {
+      onSend({
+        roomId,
+        senderId: currentUserId,
+        senderName: currentUserName,
+        content,
+      });
+      setContent("");
+    }
   };
 
   const onEnter: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
-    if (e.key === 'Enter') {
-      if (e.shiftKey) {
-        return;
-      }
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      if (!content?.trim()) {
-        return;
-      }
       onSubmit();
-      setContent('');
     }
   };
 
   return (
     <FormZone>
-      <Form onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit();
-      }}>
+      <Form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit();
+        }}
+      >
         <Textarea
           value={content}
           onChange={onChangeContent}
           onKeyDown={onEnter}
           placeholder="Start a new message"
         />
-        <SubmitButton type="submit" disabled={!content?.trim()}>
-          <Send alt="전송 이미지" className="w-[24px] h-[24px] " fill="currentColor" />
+        <SubmitButton type="submit" disabled={!content.trim()}>
+          <Send className="w-[24px] h-[24px]" fill="currentColor" />
         </SubmitButton>
       </Form>
     </FormZone>
@@ -113,43 +74,27 @@ const FormZone = styled.div`
   height: 56px;
   display: flex;
   align-items: center;
-  justify-content: center;
 `;
 
 const Form = styled.form`
-  background: #303336;
-  margin: 4px 12px;
-  border-radius: 16px;
-  padding: 4px;
+  flex: 1;
   display: flex;
-  flex-direction: row;
-  width: 100%;
   align-items: center;
+  padding: 4px;
 `;
 
 const Textarea = styled(TextareaAutosize)`
-  width: 100%;
-  border: none;
-  padding: 5px 10px 5px 5px;
-  background: transparent;
-  font-size: 15px;
-  line-height: 20px;
   flex: 1;
-  outline: none;
-  ::placeholder {
-    color: ${(props) => props.theme.linecolor};
+  padding: 5px;
+  resize: none;
+  background: transparent;
+  &:focus {
+    outline: none;
   }
 `;
 
-
 const SubmitButton = styled.button`
   cursor: pointer;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 34px;
   height: 34px;
-  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
-  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
 `;

@@ -40,7 +40,7 @@ export default function SingleSignOn() {
     const formattedCustomId = `${customId}`;
 
     localStorage.setItem("customId", formattedCustomId);
-    console.log(formattedCustomId);
+    console.log("formattedCustomId", formattedCustomId);
 
     {
       try {

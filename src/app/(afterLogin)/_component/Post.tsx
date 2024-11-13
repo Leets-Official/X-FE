@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
@@ -9,7 +10,6 @@ import ActionButtons from "./ActionButtons";
 
 dayjs.extend(relativeTime);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Post({ post }: { post: any }) {
   const createdAt = dayjs(post?.createdAt);
   const now = dayjs(); // 현재 시간
@@ -27,49 +27,43 @@ export default function Post({ post }: { post: any }) {
 
   // 이미지 유효하지 않은 경우 디폴트 이미지 적용
   const profileImageUrl =
-    post?.user?.profileImage?.link || "/default_profile_img.svg";
+    post?.user?.profileImage?.url || "/default_profile_img.svg";
 
   return (
-    <Main>
-      <PostArticle postUserId={post?.user?.customId} postId={post?.id}>
-        <PostWrapper>
-          <PostUserSection>
+    <PostArticle postUserId={post?.user?.customId} postId={post?.id}>
+      <PostWrapper>
+        <PostUserSection>
+          <Link href={`/${post?.user?.customId}`} passHref>
+            <PostUserImage>
+              <img src={profileImageUrl} alt={post?.user?.name || "User"} />
+              <PostShade />
+            </PostUserImage>
+          </Link>
+        </PostUserSection>
+        <PostBody>
+          <PostMeta>
             <Link href={`/${post?.user?.customId}`} passHref>
-              <PostUserImage>
-                <img src={profileImageUrl} alt={post?.user?.name || "User"} />
-                <PostShade />
-              </PostUserImage>
+              <span>{post?.user?.name}</span>
+              &nbsp;
+              <span>{post?.user?.customId}</span>
+              &nbsp;·&nbsp;
             </Link>
-          </PostUserSection>
-          <PostBody>
-            <PostMeta>
-              <Link href={`/${post?.user?.customId}`} passHref>
-                <span>{post?.user?.name}</span>
-                &nbsp;
-                <span>{post?.user?.customId}</span>
-                &nbsp;·&nbsp;
-              </Link>
-              <PostDate>{formattedTime}</PostDate>
-            </PostMeta>
-            <div>{post?.content}</div>
-            <PostImages post={post} />
-          </PostBody>
-        </PostWrapper>
-      </PostArticle>
-      <ActionButtons
-        reply={post?.replyCount}
-        repost={post?.repostCount}
-        like={post?.likeCount}
-        postId={post?.id}
-        isLikedByUser={post?.isLikedByUser}
-      />
-    </Main>
+            <PostDate>{formattedTime}</PostDate>
+          </PostMeta>
+          <div>{post?.content}</div>
+          <PostImages post={post} />
+          <ActionButtons
+            reply={post?.replyCount}
+            repost={post?.repostCount}
+            like={post?.likeCount}
+            postId={0}
+            isLikedByUser={false}
+          />
+        </PostBody>
+      </PostWrapper>
+    </PostArticle>
   );
 }
-
-const Main = styled.div`
-  border-bottom: 1px solid rgb(239, 243, 244);
-`;
 
 const PostWrapper = styled.div`
   display: flex;

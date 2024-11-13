@@ -39,15 +39,15 @@ export default function NavMenu() {
   const segment = useSelectedLayoutSegment();
   const [customId, setCustomId] = useState("");
 
-  useEffect(() => {
-    const customId = localStorage.getItem("customId");
+  const navMenucustomId = localStorage.getItem("customId");
 
-    console.log(customId);
+  useEffect(() => {
+    console.log("customIdddddddd", navMenucustomId);
 
     if (customId) {
       setCustomId(customId);
     }
-  }, []);
+  }, [navMenucustomId]);
 
   return (
     <>

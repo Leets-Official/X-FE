@@ -1,28 +1,86 @@
-"use client"
+"use client";
 
 import styled from "styled-components";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function LogoutButton() {
-  const me = { // Temporary user info
-    id: 'jini',
-    nickname: '이유진',
-    image: '/default_profile_img.svg',
-  }
+  const [userProfile, setUserProfile] = useState({
+    id: "",
+    nickname: "",
+    image: "/default_profile_img.svg",
+  });
+  const [accessToken, setAccessToken] = useState<string | null>(null);
 
-  const onLogout = () => {};
+  // 사용자 프로필 정보 불러오기 함수
+  const fetchUserProfile = async () => {
+    try {
+      const accessToken = localStorage.getItem("accesstoken");
+      const customId = localStorage.getItem("customId");
+      const userId = localStorage.getItem("userId");
+
+      if (!accessToken || !userId) {
+        console.log("accessToken 또는 userId가 없습니다.");
+        return;
+      }
+
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      const imageUrl =
+        response.data.data.profileImage?.url || "/default_profile_img.svg";
+      const nickname = response.data.data.name || "Unknown User";
+      const id = response.data.data.customId || "";
+
+      setUserProfile({
+        id,
+        nickname,
+        image: imageUrl,
+      });
+
+      console.log("User profile fetched: ", response.data);
+    } catch (error) {
+      console.error("유저 프로필 조회에 실패했습니다: ", error);
+    }
+  };
+
+  // 컴포넌트 마운트 시 사용자 프로필 정보 불러오기
+  useEffect(() => {
+    setAccessToken(localStorage.getItem("accesstoken"));
+    fetchUserProfile();
+  }, []);
+
+  const onLogout = () => {
+    // 로그아웃 로직
+    localStorage.removeItem("accesstoken");
+    localStorage.removeItem("customId");
+    localStorage.removeItem("userId");
+    window.location.reload();
+  };
 
   return (
     <StyledLogoutButton onClick={onLogout}>
       <UserImage>
-        <Image src={me.image} width={40} height={40} alt="프로필 이미지"/>
+        <img
+          src={userProfile.image}
+          width={40}
+          height={40}
+          alt="프로필 이미지"
+        />
       </UserImage>
       <UserName>
-        <div>{me.nickname}</div>
-        <div>@{me.id}</div>
+        <div>{userProfile.nickname}</div>
+        <div>@{userProfile.id}</div>
       </UserName>
     </StyledLogoutButton>
-  )
+  );
 }
 
 const StyledLogoutButton = styled.button`
@@ -54,6 +112,7 @@ const UserImage = styled.div`
 
   img {
     width: 40px;
+    height: 40px;
     border-radius: 50%;
   }
 `;

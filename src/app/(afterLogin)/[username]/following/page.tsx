@@ -72,8 +72,10 @@ export default function Following() {
   };
 
   useEffect(() => {
-    fetchFollowing();
-  }, [userId]);
+    if (userId && accessToken) {
+      fetchFollowing();
+    }
+  }, [userId, accessToken]);
 
   const router = useRouter();
 

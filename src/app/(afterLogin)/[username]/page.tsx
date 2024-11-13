@@ -69,23 +69,40 @@ export default function Profile() {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  // useEffect(() => {
+  //   const getPosts = async () => {
+  //     try {
+  //       const data = await getFollowingPosts();
+  //       setPosts(data);
+  //       if (loading) {
+  //         return <div>Loading...</div>;
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching posts:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   getPosts();
+  // });
+
   useEffect(() => {
     const getPosts = async () => {
       try {
         const data = await getFollowingPosts();
         setPosts(data);
-        if (loading) {
-          return <div>Loading...</div>;
-        }
       } catch (error) {
         console.error("Error fetching posts:", error);
       } finally {
-        setLoading(false);
+        setLoading(false); // API 요청이 완료되면 loading 상태를 false로 변경
       }
     };
 
-    getPosts();
-  });
+    if (loading) {
+      getPosts();
+    }
+  }, [loading]); // loading 상태에 의존하여 다시 호출되지 않도록 수정
 
   const params = useParams();
   const customId = params.username;
@@ -104,6 +121,8 @@ export default function Profile() {
     if (myId) setMyCustomId(myId); //kimjiwon
     if (id) setUserId(id); //4
   }, []);
+
+  const [profileImageUrl, setProfileImageUrl] = useState<string>("");
 
   const fetchUserProfile = async () => {
     try {
@@ -131,7 +150,11 @@ export default function Profile() {
           },
         }
       );
-      console.log(response);
+      const imageUrl =
+        response.data.data.profileImage?.url || "/default_profile_img.svg";
+      setProfileImageUrl(imageUrl);
+
+      console.log("response: ", response);
 
       const { data } = response.data;
 
@@ -143,6 +166,8 @@ export default function Profile() {
 
     if (error) return <div>{error}</div>;
   };
+
+  console.log("imageUrl: ", profileImageUrl);
 
   const user = {
     // image: "/default_profile_img.svg",
@@ -200,6 +225,8 @@ export default function Profile() {
     router.push(`/settings/profile`);
   };
 
+  //const profileImageUrl = userProfile?.image || "/default_profile_img.svg";
+
   return (
     <TabProvider>
       <Main>
@@ -211,7 +238,7 @@ export default function Profile() {
         <UserZone>
           <ProfileHeader>
             <UserImage>
-              <img src={userProfile?.image} alt={userProfile?.image} />
+              <img src={profileImageUrl} alt={userProfile?.image} />
             </UserImage>
             {userProfile?.isMyProfile ? (
               <EditProfileButton onClick={onEditProfile}>

@@ -8,9 +8,19 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
 import dayjs from "dayjs";
 import MessageForm from "./_component/MessgeForm";
+import { useEffect, useState } from "react";
+import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
+
+interface Message {
+  roomId: number;
+  senderId: number;
+  senderName: string;
+  content: string;
+}
 
 const MainContainer = styled.main`
   width: 600px;
@@ -43,17 +53,15 @@ const UserInfo = styled(Link)`
   display: flex;
   align-items: center;
   flex-direction: column;
-  transition-property: background-color;
-  transition-duration: 0.2s;
-  border-color: ${(props) => props.theme.linecolor};
-  cursor: pointer;
-  border-bottom: 1px solid ${(props) => props.theme.linecolor};;
+  border-bottom: 1px solid ${(props) => props.theme.linecolor};
   margin-bottom: 20px;
+  cursor: pointer;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
   }
 `;
+
 const UserId = styled.div`
   color: ${(props) => props.theme.linecolor};
   font-size: 13px;
@@ -68,7 +76,7 @@ const UserImage = styled.img`
 const MessageList = styled.div`
   padding-bottom: 24px;
   flex: 1;
-  overflow-y: auto; 
+  overflow-y: auto;
 `;
 
 const StyledMessageForm = styled(MessageForm)`
@@ -81,27 +89,22 @@ const StyledMessageForm = styled(MessageForm)`
 `;
 
 const MessageContent = styled.div<{ isMyMessage: boolean }>`
-  line-height: 20px;
   padding: 12px 16px;
   font-size: 15px;
-  border-radius: ${(props) => (props.isMyMessage ? '22px 22px 0 22px' : '22px 22px 22px 0')};
-  background-color: ${(props) => (props.isMyMessage ? 'rgb(29, 155, 240)' : '#303336')};
+  border-radius: ${(props) =>
+    props.isMyMessage ? "22px 22px 0 22px" : "22px 22px 22px 0"};
+  background-color: ${(props) =>
+    props.isMyMessage ? "rgb(29, 155, 240)" : "#303336"};
   color: white;
 `;
-
 
 const MessageWrapper = styled.div<{ isMyMessage: boolean }>`
   display: flex;
   flex-direction: column;
-  align-items: ${({ isMyMessage }) => (isMyMessage ? "flex-end" : "flex-start")};
+  align-items: ${({ isMyMessage }) =>
+    isMyMessage ? "flex-end" : "flex-start"};
+  margin-bottom: 8px;
 `;
-
-const MessageDate = styled.div`
-  margin-top: 8px;
-  color: ${(props) => props.theme.linecolor};
-  font-size: 13px;
-`;
-
 
 export default function ChatRoom() {
   const user = {
@@ -110,52 +113,101 @@ export default function ChatRoom() {
     image: faker.image.avatar(),
   };
 
-  const messages = [
-    {
-      messageId: 1,
-      roomId: 123,
-      id: "zerohch0",
-      content: "안녕하세요.",
-      createdAt: new Date(),
-    },
-    {
-      messageId: 2,
-      roomId: 123,
-      id: "hero",
-      content: "안녕히가세요.",
-      createdAt: new Date(),
-    },
-  ];
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [stompClient, setStompClient] = useState<Client | null>(null);
+  const roomId = 6;
+  const currentUserId = 4;
+  const currentUserName = "testtest";
 
-    return (
-      <MainContainer>
-        <Header>
-          <BackButton />
-          <HeaderTitle>{user.nickname}</HeaderTitle>
-        </Header>
-        <UserInfo href={user.nickname}>
-          <UserImage src={user.image} alt={user.id} />
-          <div>
-            <b>{user.nickname}</b>
-          </div>
-          <UserId>@{user.id}</UserId>
-        </UserInfo>
-        <MessageList>
-          {messages.map((message) => {
-            const isMyMessage = message.id === "zerohch0";
-            return (
-              <MessageWrapper key={message.messageId} isMyMessage={isMyMessage}>
-                <MessageContent isMyMessage={isMyMessage}>
-                  {message.content}
-                </MessageContent>
-                <MessageDate>
-                  {dayjs(message.createdAt).format("YYYY년 MM월 DD일 A HH시 mm분")}
-                </MessageDate>
-              </MessageWrapper>
-            );
-          })}
-        </MessageList>
-        <StyledMessageForm />
-      </MainContainer>
+  useEffect(() => {
+    const socket = new SockJS(
+      `${process.env.NEXT_PUBLIC_CHAT_API_BASE_URL}/ws`
     );
+    const client = new Client({
+      webSocketFactory: () => socket,
+      connectHeaders: {},
+      debug: (str) => console.log("[STOMP Debug]:", str),
+      reconnectDelay: 5000,
+      onConnect: (frame) => {
+        console.log("[Connected]:", frame);
+
+        client.subscribe(`/sub/chats/${roomId}`, (message) => {
+          const messageData: Message = JSON.parse(message.body);
+
+          setMessages((prevMessages) => [...prevMessages, messageData]);
+        });
+      },
+      onStompError: (frame) => {
+        console.error("[STOMP Error]:", frame.headers["message"]);
+        console.error("[Error Details]:", frame.body);
+      },
+    });
+
+    client.activate();
+    setStompClient(client);
+
+    return () => {
+      client.deactivate();
+    };
+  }, []);
+
+  useEffect(() => {
+    const messageList = document.getElementById("message-list");
+    if (messageList) {
+      messageList.scrollTop = messageList.scrollHeight;
+    }
+  }, [messages]);
+
+  const sendMessage = (message: {
+    roomId: number;
+    senderId: number;
+    senderName: string;
+    content: string;
+  }) => {
+    if (stompClient && stompClient.connected) {
+      // 메시지를 바로 로컬 상태에 추가
+      setMessages((prevMessages) => [...prevMessages, message]);
+      stompClient.publish({
+        destination: "/pub/chats/messages",
+        body: JSON.stringify(message),
+      });
+      console.log("[메시지 전송]:", message);
+    } else {
+      console.error("[STOMP 클라이언트가 연결되지 않았습니다]");
+    }
+  };
+
+  return (
+    <MainContainer>
+      <Header>
+        <BackButton />
+        <HeaderTitle>{user.nickname}</HeaderTitle>
+      </Header>
+      <UserInfo href={user.nickname}>
+        <UserImage src={user.image} alt={user.id} />
+        <div>
+          <b>{user.nickname}</b>
+        </div>
+        <UserId>@{user.id}</UserId>
+      </UserInfo>
+      <MessageList id="message-list">
+        {messages.map((message, index) => {
+          const isMyMessage = message.senderId === currentUserId;
+          return (
+            <MessageWrapper key={index} isMyMessage={isMyMessage}>
+              <MessageContent isMyMessage={isMyMessage}>
+                {message.content}
+              </MessageContent>
+            </MessageWrapper>
+          );
+        })}
+      </MessageList>
+      <StyledMessageForm
+        onSend={sendMessage}
+        roomId={roomId}
+        currentUserId={currentUserId}
+        currentUserName={currentUserName}
+      />
+    </MainContainer>
+  );
 }
