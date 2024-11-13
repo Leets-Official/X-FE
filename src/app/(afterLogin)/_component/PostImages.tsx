@@ -35,8 +35,6 @@ type Props = {
 export default function PostImages({ post }: Props) {
   if (!post?.images || post?.images.length === 0) return null;
 
-  console.log(post.images); // post.images가 제대로 출력되는지 확인
-
   if (post.images.length === 1) {
     const image = post.images[0];
     return (

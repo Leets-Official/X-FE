@@ -29,10 +29,10 @@ import TabProvider from "./_component/TabProvider";
 import Post from "../_component/Post";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { followUser, unfollowUser } from "./api/follow";
 import { getFollowingPosts } from "@/_service/post";
 import MessageIcon from "../../../../public/ic_message.svg";
-import { fetchUserProfile } from "@/_service/profile";
 
 type UserProfile = {
   userId: number;
@@ -61,12 +61,13 @@ export default function Profile() {
     image: "",
   });
 
+  const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState("");
-  const [accessToken, setAccessToken] = useState("");
-  const [myCustomId, setMyCustomId] = useState("");
 
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const accessToken = localStorage.getItem("accesstoken") || "";
 
   useEffect(() => {
     const getPosts = async () => {
@@ -86,26 +87,63 @@ export default function Profile() {
   }, [loading]); // loading 상태에 의존하여 다시 호출되지 않도록 수정
 
   const params = useParams();
-  const customId = Array.isArray(params.username) ? params.username[0] : params.username
-  console.log("customId:", customId);
-
-  console.log("customId", customId);
+  const customId = params.username;
 
   useEffect(() => {
-    const myId = localStorage.getItem("customId"); //kimjiwon
-    const myUserId = localStorage.getItem("userId"); //19 -> 김지원
     const id = sessionStorage.getItem("userId"); //4 -> 이강혁
-
-    console.log(myUserId, myId, id);
-    console.log(accessToken);
-
-    if (accessToken) setAccessToken(accessToken);
-    if (myId) setMyCustomId(myId); //kimjiwon
+    console.log(id,"유저의 유저 아이디");
     if (id) setUserId(id); //4
   }, []);
 
   const [profileImageUrl, setProfileImageUrl] = useState<string>("");
 
+  const fetchUserProfile = async () => {
+    try {
+      const isMyProfile = customId === localStorage.getItem("customId");
+
+      // console.log("커아",customId,"내아",localStorage.getItem("customId"));
+      const targetUserId = isMyProfile ? localStorage.getItem("userId") : userId;
+  
+      if (!targetUserId || !accessToken) {
+        // console.log(`userId:${targetUserId} 또는 accessToken:${accessToken}이 없습니다.`);
+        return;
+      }
+  
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile/${customId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+  
+      const { data } = response.data;
+  
+      // 프로필 이미지 URL 설정
+      const imageUrl = data.profileImage?.url || "/default_profile_img.svg";
+      setProfileImageUrl(imageUrl);
+  
+      // `setUserProfile`에 객체 전달
+      setUserProfile({
+        userId: data.userId,
+        isMyProfile: data.isMyProfile,
+        name: data.name,
+        customId: data.customId,
+        followerCount: data.followerCount || 0,
+        followingCount: data.followingCount || 0,
+        isFollowing: data.isFollowing,
+        createdAt: data.createdAt,
+        introduce: data.introduce || "소개가 없습니다.",
+        image: imageUrl,
+      });
+
+    } catch (error) {
+      console.log("유저 기본 프로필 조회에 오류가 생겼습니다.", error);
+      setError("유저 기본 프로필 조회에 오류가 발생하였습니다.");
+    }
+  };
+  
 
   console.log("imageUrl: ", profileImageUrl);
 
@@ -117,11 +155,8 @@ export default function Profile() {
   const router = useRouter();
 
   useEffect(() => {
-    if (userId) {
-      fetchUserProfile(customId, myCustomId, userId, setProfileImageUrl, setUserProfile);
-    }
-  }, [userId]);
-  
+    fetchUserProfile();
+  }, []);
 
   const onClickFollow = async () => {
     if (!userProfile || !userProfile.userId) {
@@ -166,6 +201,7 @@ export default function Profile() {
     router.push(`/settings/profile`);
   };
 
+  
   return (
     <TabProvider>
       <Main>

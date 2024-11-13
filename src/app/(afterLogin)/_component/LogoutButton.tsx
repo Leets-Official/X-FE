@@ -11,22 +11,19 @@ export default function LogoutButton() {
     nickname: "",
     image: "/default_profile_img.svg",
   });
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-
   // 사용자 프로필 정보 불러오기 함수
   const fetchUserProfile = async () => {
     try {
       const accessToken = localStorage.getItem("accesstoken");
       const customId = localStorage.getItem("customId");
-      const userId = localStorage.getItem("userId");
 
-      if (!accessToken || !userId) {
-        console.log("accessToken 또는 userId가 없습니다.");
+      if (!accessToken || !customId) {
+        console.log("accessToken 또는 customId 없습니다.");
         return;
       }
 
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile/${userId}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile/${customId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -38,6 +35,10 @@ export default function LogoutButton() {
         response.data.data.profileImage?.url || "/default_profile_img.svg";
       const nickname = response.data.data.name || "Unknown User";
       const id = response.data.data.customId || "";
+
+      localStorage.setItem("customId", id);
+
+      console.log('로그아웃 버튼',response.data);
 
       setUserProfile({
         id,
@@ -53,7 +54,6 @@ export default function LogoutButton() {
 
   // 컴포넌트 마운트 시 사용자 프로필 정보 불러오기
   useEffect(() => {
-    setAccessToken(localStorage.getItem("accesstoken"));
     fetchUserProfile();
   }, []);
 

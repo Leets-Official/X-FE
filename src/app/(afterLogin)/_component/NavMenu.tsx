@@ -9,6 +9,7 @@ import FillHome from "../../../../public/ic_fill_home.svg";
 import FillMessage from "../../../../public/ic_fill_message.svg";
 import FillProfile from "../../../../public/ic_fill_profile.svg";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const NavPill = styled.div`
   display: inline-flex;
@@ -37,17 +38,37 @@ const NavPill = styled.div`
 
 export default function NavMenu() {
   const segment = useSelectedLayoutSegment();
-  const [customId, setCustomId] = useState("");
-
-  const navMenucustomId = localStorage.getItem("customId");
+  const customId = localStorage.getItem("customId");
+  const accessToken = localStorage.getItem("accesstoken");
 
   useEffect(() => {
-    console.log("customIdddddddd", navMenucustomId);
+    // API 요청 함수
+    const fetchUserProfile = async () => {
+      try {
+        if (!customId || !accessToken) {
+          console.log("customId 또는 accessToken이 없습니다.");
+          return;
+        }
 
-    if (customId) {
-      setCustomId(customId);
-    }
-  }, [navMenucustomId]);
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile/${customId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        const { data } = response.data;
+        console.log("API 응답 데이터:", data);
+
+      } catch (error) {
+        console.error("API 요청 중 오류가 발생했습니다:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, [customId, accessToken]);
 
   return (
     <>
@@ -101,11 +122,11 @@ export default function NavMenu() {
           </NavPill>
         </Link>
       </li>
-      {navMenucustomId && (
+      {customId && (
         <li>
-          <Link href={`/${navMenucustomId}`}>
+          <Link href={`/${customId}`}>
             <NavPill>
-              {segment === navMenucustomId ? (
+              {segment === customId ? (
                 <>
                   <Profile
                     alt="프로필 이미지"
