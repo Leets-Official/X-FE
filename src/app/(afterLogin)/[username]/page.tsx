@@ -62,6 +62,7 @@ export default function Profile() {
   });
 
   const [error, setError] = useState<string | null>(null);
+  console.log(error);
 
   //const [userId, setUserId] = useState("");
 
@@ -134,7 +135,6 @@ export default function Profile() {
     } catch (error) {
       console.log("유저 기본 프로필 조회에 오류가 생겼습니다.", error);
       setError("유저 기본 프로필 조회에 오류가 발생하였습니다.");
-      console.log(error);
     }
   };
 
