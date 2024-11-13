@@ -101,11 +101,11 @@ export default function NavMenu() {
           </NavPill>
         </Link>
       </li>
-      {customId && (
+      {navMenucustomId && (
         <li>
-          <Link href={`/${customId}`}>
+          <Link href={`/${navMenucustomId}`}>
             <NavPill>
-              {segment === customId ? (
+              {segment === navMenucustomId ? (
                 <>
                   <Profile
                     alt="프로필 이미지"
