@@ -3,8 +3,10 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function LogoutButton() {
+  const router = useRouter();
   const [userProfile, setUserProfile] = useState({
     id: "",
     nickname: "",
@@ -13,6 +15,11 @@ export default function LogoutButton() {
   // 사용자 프로필 정보 불러오기 함수
   const fetchUserProfile = async () => {
     try {
+      if (typeof window === "undefined") {
+        console.log("서버 환경에서는 localStorage에 접근할 수 없습니다.");
+        return;
+      }
+
       const accessToken = localStorage.getItem("accesstoken");
       const customId = localStorage.getItem("customId");
 
@@ -57,11 +64,19 @@ export default function LogoutButton() {
   }, []);
 
   const onLogout = () => {
-    // 로그아웃 로직
-    localStorage.removeItem("accesstoken");
-    localStorage.removeItem("customId");
-    localStorage.removeItem("userId");
-    window.location.reload();
+    // 브라우저 환경에서만 실행
+    if (typeof window !== "undefined") {
+      // 로그아웃 로직
+      localStorage.removeItem("accesstoken");
+      localStorage.removeItem("customId");
+      localStorage.removeItem("userId");
+
+      router.push(`/`);
+    } else {
+      console.error(
+        "브라우저 환경이 아니어서 localStorage에 접근할 수 없습니다."
+      );
+    }
   };
 
   return (

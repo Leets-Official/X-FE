@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import CloseButton from "../../../../../public/closeButton.svg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BackgroundImage from "./BackgroundImage";
 import ProfileImage from "./ProfileImage";
 import Form from "./Form";
@@ -12,7 +12,15 @@ import axios from "axios";
 export default function EditProfile() {
   const router = useRouter();
 
-  const accessToken = localStorage.getItem("accesstoken");
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    // 클라이언트 환경에서만 실행
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("accesstoken");
+      setAccessToken(token);
+    }
+  }, []);
 
   const closeModal = () => {
     router.back();

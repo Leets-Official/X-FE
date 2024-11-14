@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const accessToken = localStorage.getItem("accesstoken");
+const accessToken =
+  typeof window !== "undefined" ? localStorage.getItem("accesstoken") : null;
+
+//const accessToken = localStorage.getItem("accesstoken");
 // 전체 게시물 조회 (추천탭)
 export const getAllPosts = async () => {
   try {

@@ -2,8 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 
 export default function Loading() {
   const router = useRouter();
@@ -26,8 +25,21 @@ export default function Loading() {
     }
   };
 
-  const params = useSearchParams();
-  const authCode = params.get("code");
+  // const [authCode, setAuthCode] = useState<string | null>(null);
+
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const code = new URLSearchParams(window.location.search).get("code");
+  //     setAuthCode(code);
+  //     console.log("1111authCode: ", code);
+  //   }
+  // }, []);
+
+  const authCode =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("code")
+      : null;
+
   console.log("authCode: ", authCode);
 
   const handleLoginPost = async () => {
@@ -49,17 +61,24 @@ export default function Loading() {
       console.log("res: ", res);
 
       const accessToken = res.data.data.jwtToken.accessToken;
-      console.log("login accesstoken", accessToken);
-      //const accessToken = `${process.env.NEXT_PUBLIC_API_MASTER_TOKEN}`;
-      localStorage.setItem("accesstoken", accessToken);
-
       const userId = res.data.data.id;
-      localStorage.setItem("userId", userId);
-      console.log("login userId:", userId);
-
       const customId = res.data.data.customId;
-      localStorage.setItem("customId", customId);
-      console.log("login customId", customId);
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("accesstoken", accessToken);
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("customId", customId);
+      }
+
+      // console.log("login accesstoken", accessToken);
+      // //const accessToken = `${process.env.NEXT_PUBLIC_API_MASTER_TOKEN}`;
+      // localStorage.setItem("accesstoken", accessToken);
+
+      // localStorage.setItem("userId", userId);
+      // console.log("login userId:", userId);
+
+      // localStorage.setItem("customId", customId);
+      // console.log("login customId", customId);
 
       const responseCode = res.data.code;
       //const responseCode = 201;
@@ -86,7 +105,12 @@ export default function Loading() {
     }
   };
 
+  console.log("진짜진짜", authCode);
+
   useEffect(() => {
+    //handleLoginPost();
+    console.log(authCode);
+    console.log(loading);
     if (authCode && loading) {
       handleLoginPost();
     } else if (!authCode) {
@@ -98,15 +122,17 @@ export default function Loading() {
   }, [authCode, loading]);
 
   return (
-    <div className="justify-center">
-      {loading && authChecked ? (
-        <h2>로그인중입니다.</h2>
-      ) : errorMessage ? (
-        <div>
-          <h2>로그인 실패</h2>
-          <p>{errorMessage}</p>
-        </div>
-      ) : null}
-    </div>
+    <Suspense>
+      <div className="justify-center">
+        {loading && authChecked ? (
+          <h2>로그인중입니다.</h2>
+        ) : errorMessage ? (
+          <div>
+            <h2>로그인 실패</h2>
+            <p>{errorMessage}</p>
+          </div>
+        ) : null}
+      </div>
+    </Suspense>
   );
 }

@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true, // SWC 최적화 활성화
+  output: "standalone",
   compiler: {
     styledComponents: true, // styled-components 사용 설정
   },
@@ -13,8 +14,12 @@ const nextConfig = {
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
+    config.cache = false;
 
     return config;
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
 };
 

@@ -1,4 +1,4 @@
-"use client";  // 클라이언트 전용 코드로 명시
+"use client"; // 클라이언트 전용 코드로 명시
 
 import BackButton from "@/(afterLogin)/_component/BackButton";
 import Post from "@/(afterLogin)/_component/Post";
@@ -18,11 +18,13 @@ export default function SinglePost() {
   // id를 숫자로 변환(params에서 가져올 때는 string으로 가져와서)
   useEffect(() => {
     if (id) {
-      const numericPostId = parseInt(id, 10);
+      const postIdString = Array.isArray(id) ? id[0] : id;
+      const numericPostId = parseInt(postIdString, 10);
+      //const numericPostId = parseInt(id, 10);
       if (!isNaN(numericPostId)) {
         setPostId(numericPostId);
       } else {
-        console.error('Invalid postId');
+        console.error("Invalid postId");
       }
     }
   }, [id]);
@@ -35,17 +37,17 @@ export default function SinglePost() {
           const data = await getPostDetails(postId);
           setPosts(data);
         } else {
-          console.error('Invalid postId');
+          console.error("Invalid postId");
         }
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error("Error fetching posts:", error);
       } finally {
         setLoading(false);
       }
     };
 
     getDetails();
-  }, [postId]); 
+  }, [postId]);
 
   if (loading) {
     return <div>Loading...</div>;

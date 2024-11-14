@@ -16,9 +16,11 @@ export default function SingleSignOn() {
   const router = useRouter();
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accesstoken");
-    if (accessToken) {
-      setAccessToken(accessToken);
+    if (typeof window !== "undefined") {
+      const accessToken = localStorage.getItem("accesstoken");
+      if (accessToken) {
+        setAccessToken(accessToken);
+      }
     }
   }, []);
 
@@ -39,7 +41,9 @@ export default function SingleSignOn() {
     const birth = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     const formattedCustomId = `${customId}`;
 
-    localStorage.setItem("customId", formattedCustomId);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("customId", formattedCustomId);
+    }
     console.log("formattedCustomId", formattedCustomId);
 
     {

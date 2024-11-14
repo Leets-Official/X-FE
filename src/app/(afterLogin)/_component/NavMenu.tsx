@@ -8,7 +8,7 @@ import Profile from "../../../../public/ic_profile.svg";
 import FillHome from "../../../../public/ic_fill_home.svg";
 import FillMessage from "../../../../public/ic_fill_message.svg";
 import FillProfile from "../../../../public/ic_fill_profile.svg";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const NavPill = styled.div`
@@ -38,9 +38,22 @@ const NavPill = styled.div`
 
 export default function NavMenu() {
   const segment = useSelectedLayoutSegment();
-  const customId = localStorage.getItem("customId");
+  const [customId, setCustomId] = useState<string | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    // 브라우저 환경에서만 `localStorage`에 접근
+    if (typeof window !== "undefined") {
+      setCustomId(localStorage.getItem("customId"));
+      setAccessToken(localStorage.getItem("accesstoken"));
+    }
+
+    // console.log(customId);
+    // console.log(accessToken);
+  }, []);
+
   console.log(customId);
-  const accessToken = localStorage.getItem("accesstoken");
+  console.log(accessToken);
 
   useEffect(() => {
     // API 요청 함수

@@ -67,7 +67,10 @@ export default function Profile() {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const accessToken = localStorage.getItem("accesstoken") || "";
+  const accessToken =
+    typeof window !== "undefined"
+      ? localStorage.getItem("accesstoken") || ""
+      : "";
 
   useEffect(() => {
     const getPosts = async () => {
@@ -88,19 +91,20 @@ export default function Profile() {
 
   const params = useParams();
   const customId = params.username;
-  console.log('커스텀 아이디', customId);
+  console.log("커스텀 아이디", customId);
   const [profileImageUrl, setProfileImageUrl] = useState<string>("");
 
   const fetchUserProfile = async () => {
     try {
-
       // console.log("커아",customId,"내아",localStorage.getItem("customId"));
-  
+
       if (!customId || !accessToken) {
-        console.log(`userId:${customId} 또는 accessToken:${accessToken}이 없습니다.`);
+        console.log(
+          `userId:${customId} 또는 accessToken:${accessToken}이 없습니다.`
+        );
         return;
       }
-  
+
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile/${customId}`,
         {
@@ -109,13 +113,13 @@ export default function Profile() {
           },
         }
       );
-  
+
       const { data } = response.data;
-  
+
       // 프로필 이미지 URL 설정
       const imageUrl = data.profileImage?.url || "/default_profile_img.svg";
       setProfileImageUrl(imageUrl);
-  
+
       // `setUserProfile`에 객체 전달
       setUserProfile({
         userId: data.userId,
@@ -129,13 +133,11 @@ export default function Profile() {
         introduce: data.introduce || "소개가 없습니다.",
         image: imageUrl,
       });
-
     } catch (error) {
       console.log("유저 기본 프로필 조회에 오류가 생겼습니다.", error);
       setError("유저 기본 프로필 조회에 오류가 발생하였습니다.");
     }
   };
-  
 
   console.log("imageUrl: ", profileImageUrl);
 
@@ -193,7 +195,6 @@ export default function Profile() {
     router.push(`/settings/profile`);
   };
 
-  
   return (
     <TabProvider>
       <Main>

@@ -21,16 +21,23 @@ export const fetchUserProfile = async (
   setUserProfile: React.Dispatch<React.SetStateAction<UserProfile>>
 ) => {
   try {
-    const accessToken = localStorage.getItem("accesstoken");
+    const accessToken =
+      typeof window !== "undefined"
+        ? localStorage.getItem("accesstoken")
+        : null;
+
+    console.log("profile.tsx", accessToken);
+
     const isMyProfile = customId === myCustomId;
 
     console.log("customId: ", customId);
     console.log("myCustomId: ", myCustomId);
     console.log("isMyProfile: ", isMyProfile);
 
-    const targetUserId = isMyProfile
-      ? localStorage.getItem("userId")
-      : userId;
+    const targetUserId =
+      isMyProfile && typeof window !== "undefined"
+        ? localStorage.getItem("userId")
+        : userId;
 
     if (!targetUserId || !accessToken) {
       console.log("userId 또는 accessToken이 없습니다.");
