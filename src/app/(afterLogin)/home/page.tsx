@@ -29,22 +29,26 @@ const StyledMain = styled.main`
 
 export default function Home() {
   const [posts, setPosts] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); 
-  const [tab, setTab] = useState<'rec' | 'fol'>('rec');
+  const [loading, setLoading] = useState<boolean>(true);
+  const [tab, setTab] = useState<"rec" | "fol">("rec");
+
+  const token =
+    "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWRhbmRrYW5nQGdtYWlsLmNvbSIsImlhdCI6MTczMTE2Nzc0OSwiZXhwIjoxNzMyMzc3MzQ5fQ.B2wKj2GI3uBaa_fsLoW9czxD2RIjeY1hN-9kgyZk-dmpAd9Cz9TQ-AfCqaZdcGUsj-jcg8EE92VhjfYhBnNpTw";
+
+  localStorage.setItem("accesstoken", token);
 
   useEffect(() => {
     const getPosts = async () => {
       let data;
       try {
-        if(tab === 'rec'){
-          data = await getAllPosts(); 
-        }
-        else{
-          data = await getFollowingPosts(); 
+        if (tab === "rec") {
+          data = await getAllPosts();
+        } else {
+          data = await getFollowingPosts();
         }
         setPosts(data);
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error("Error fetching posts:", error);
       } finally {
         setLoading(false);
       }
@@ -56,30 +60,27 @@ export default function Home() {
   const refreshPosts = async () => {
     let data;
     try {
-      if(tab === 'rec'){
-        data = await getAllPosts(); 
-      }
-      else{
-        data = await getFollowingPosts(); 
+      if (tab === "rec") {
+        data = await getAllPosts();
+      } else {
+        data = await getFollowingPosts();
       }
       setPosts(data);
     } catch (error) {
-      console.error('Error refreshing posts:', error);
+      console.error("Error refreshing posts:", error);
     }
   };
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   return (
     <StyledMain>
-      <Tab tab={tab} setTab={setTab} /> 
+      <Tab tab={tab} setTab={setTab} />
       <PostForm refreshPosts={refreshPosts} />
       {posts.length > 0 ? (
-        posts.map((post, index) => (
-          <Post key={index} post={post} />
-        ))
+        posts.map((post, index) => <Post key={index} post={post} />)
       ) : (
         <div>No posts available</div>
       )}

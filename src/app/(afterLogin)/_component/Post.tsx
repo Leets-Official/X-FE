@@ -45,7 +45,7 @@ export default function Post({ post }: { post: any }) {
             <Link href={`/${post?.user?.customId}`} passHref>
               <span>{post?.user?.name}</span>
               &nbsp;
-              <span>{post?.user?.customId}</span>
+              <span>@{post?.user?.customId}</span>
               &nbsp;·&nbsp;
             </Link>
             <PostDate>{formattedTime}</PostDate>
