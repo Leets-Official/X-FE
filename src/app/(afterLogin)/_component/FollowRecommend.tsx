@@ -1,31 +1,54 @@
 "use client";
 
 import styled from "styled-components";
+import DefaultImpage from "../../../../public/default_profile_img.svg";
+import Trump from "../../../../public/Trump.png";
+import Netflix from "../../../../public/netflix.png";
 
 export default function FollowRecommend() {
-  const onFollow = () => {};
-
-  const user = {
-    id: "elonmusk",
-    nickname: "Elon Musk",
-    image: "/default_profile_img.svg",
+  const onFollow = (userId: string) => {
+    console.log(`${userId}을(를) 팔로우합니다.`);
   };
 
+  const users = [
+    {
+      id: "elonmusk",
+      nickname: "Elon_Musk",
+      image: DefaultImpage,
+    },
+    {
+      id: "넷플릭스",
+      nickname: "Netflix",
+      image: Trump,
+    },
+    {
+      id: "Donald Trump",
+      nickname: "Trump_Trump",
+      image: Netflix,
+    },
+  ];
+
   return (
-    <Container>
-      <UserLogoSection>
-        <UserLogo>
-          <img src="/default_profile_img.svg" alt={user.id} />
-        </UserLogo>
-      </UserLogoSection>
-      <UserInfo>
-        <Title>{user.nickname}</Title>
-        <Count>@{user.id}</Count>
-      </UserInfo>
-      <FollowButtonSection>
-        <FollowButton onClick={onFollow}>팔로우</FollowButton>
-      </FollowButtonSection>
-    </Container>
+    <div>
+      {users.map((user) => (
+        <Container key={user.id}>
+          <UserLogoSection>
+            <UserLogo>
+              <img src={user.image} alt={user.id} />
+            </UserLogo>
+          </UserLogoSection>
+          <UserInfo>
+            <Title>{user.nickname}</Title>
+            <Count>@{user.id}</Count>
+          </UserInfo>
+          <FollowButtonSection>
+            <FollowButton onClick={() => onFollow(user.id)}>
+              팔로우
+            </FollowButton>
+          </FollowButtonSection>
+        </Container>
+      ))}
+    </div>
   );
 }
 
