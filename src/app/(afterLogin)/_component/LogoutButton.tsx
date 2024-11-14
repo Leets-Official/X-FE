@@ -1,7 +1,6 @@
 "use client";
 
 import styled from "styled-components";
-import Image from "next/image";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -38,7 +37,7 @@ export default function LogoutButton() {
 
       localStorage.setItem("customId", id);
 
-      console.log('로그아웃 버튼',response.data);
+      console.log("로그아웃 버튼", response.data);
 
       setUserProfile({
         id,
