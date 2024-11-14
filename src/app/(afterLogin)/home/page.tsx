@@ -32,11 +32,6 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);
   const [tab, setTab] = useState<"rec" | "fol">("rec");
 
-  const token =
-    "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWRhbmRrYW5nQGdtYWlsLmNvbSIsImlhdCI6MTczMTE2Nzc0OSwiZXhwIjoxNzMyMzc3MzQ5fQ.B2wKj2GI3uBaa_fsLoW9czxD2RIjeY1hN-9kgyZk-dmpAd9Cz9TQ-AfCqaZdcGUsj-jcg8EE92VhjfYhBnNpTw";
-
-  localStorage.setItem("accesstoken", token);
-
   useEffect(() => {
     const getPosts = async () => {
       let data;
