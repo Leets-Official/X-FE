@@ -35,10 +35,10 @@ export default function Loading() {
   //   }
   // }, []);
 
-  const authCode =
-    typeof window !== "undefined"
-      ? new URLSearchParams(window.location.search).get("code")
-      : null;
+  let authCode = null;
+  if (typeof window !== "undefined") {
+    authCode = new URLSearchParams(window.location.search).get("code");
+  }
 
   console.log("authCode: ", authCode);
 
