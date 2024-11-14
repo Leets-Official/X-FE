@@ -50,7 +50,7 @@ export default function AfterLoginLayout({ children, modal, settings }: Props) {
             <Main>{children}</Main>
             <RightSection>
               <FollowRecommendContainer>
-                <h3>Follow Recommend</h3>
+                <h3>Who To Follow</h3>
                 <FollowRecommend />
               </FollowRecommendContainer>
             </RightSection>
