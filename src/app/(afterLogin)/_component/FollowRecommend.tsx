@@ -1,9 +1,6 @@
 "use client";
 
 import styled from "styled-components";
-import DefaultImpage from "../../../../public/default_profile_img.svg";
-import Trump from "../../../../public/Trump.png";
-import Netflix from "../../../../public/netflix.png";
 
 export default function FollowRecommend() {
   const onFollow = (userId: string) => {
@@ -14,17 +11,17 @@ export default function FollowRecommend() {
     {
       id: "elonmusk",
       nickname: "Elon_Musk",
-      image: DefaultImpage,
+      image: "/default_profile_img.svg",
     },
     {
       id: "넷플릭스",
       nickname: "Netflix",
-      image: Trump,
+      image: "/netflix.png",
     },
     {
       id: "Donald Trump",
       nickname: "Trump_Trump",
-      image: Netflix,
+      image: "/Trump.png",
     },
   ];
 
