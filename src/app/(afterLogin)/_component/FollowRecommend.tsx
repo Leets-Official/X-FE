@@ -15,7 +15,7 @@ export default function FollowRecommend() {
     <Container>
       <UserLogoSection>
         <UserLogo>
-          <img src={user.image} alt={user.id} />
+          <img src="/default_profile_img.svg" alt={user.id} />
         </UserLogo>
       </UserLogoSection>
       <UserInfo>
